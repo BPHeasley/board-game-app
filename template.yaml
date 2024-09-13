@@ -18,6 +18,18 @@ Globals: # https://docs.aws.amazon.com/serverless-application-model/latest/devel
   Api:
     TracingEnabled: true
 Resources:
+  BoardGamesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: "title"
+          AttributeType: "S"
+      KeySchema: # Specifies the primary key. For Board Games, it is the title of the board game
+        - AttributeName: "title"
+          KeyType: "HASH"
+      BillingMode: PAY_PER_REQUEST
+
+
   HelloWorldFunction:
     Type: AWS::Serverless::Function     # More info about Function Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html
     Properties:
@@ -63,4 +75,8 @@ Outputs:
   HelloWorldFunction:
     Description: Hello World Lambda Function ARN
     Value: !GetAtt HelloWorldFunction.Arn
+
+  BoardGamesTable:
+    Description: "Board Games DynamoDB Table"
+    Value: !GetAtt BoardGamesTable
 
