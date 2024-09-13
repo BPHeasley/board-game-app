@@ -13,6 +13,8 @@ Globals: # https://docs.aws.amazon.com/serverless-application-model/latest/devel
     # You can add LoggingConfig parameters such as the Logformat, Log Group, and SystemLogLevel or ApplicationLogLevel. Learn more here https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html#sam-function-loggingconfig.
     LoggingConfig:
       LogFormat: JSON
+    Layers:
+      - !Sub arn:aws:lambda:${AWS::Region}:017000801446:layer:AWSLambdaPowertoolsPython:20
   Api:
     TracingEnabled: true
 
@@ -33,7 +35,6 @@ Resources:
     Properties:
       CodeUri: src/api/board_game/add
       Handler: add_board_game.lambda_handler
-      Runtime: python3.12
       Tracing: Active
       Events:
         AddBoardGame:
