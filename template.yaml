@@ -78,5 +78,5 @@ Outputs:
 
   BoardGamesTable:
     Description: "Board Games DynamoDB Table"
-    Value: !GetAtt BoardGamesTable
+    Value: !Ref BoardGamesTable
 
