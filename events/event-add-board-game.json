@@ -1,0 +1,15 @@
+{
+    "resource": "/boardgames",
+    "path": "/boardgames",
+    "httpMethod": "POST",
+    "multiValueHeaders": null,
+    "queryStringParameters": null,
+    "multiValueQueryStringParameters": null,
+    "pathParameters": null,
+    "stageVariables": null,
+    "requestContext": {
+        "requestId": "be946131-30c4-4396-9c29-f25f8caa91dc"
+    },
+    "body": "{\"title\":\"test game\"}",
+    "isBase64Encoded": false
+}

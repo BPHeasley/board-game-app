@@ -3,8 +3,6 @@ Transform: AWS::Serverless-2016-10-31
 Description: >
   board-game-app
 
-  Powertools example
-
 Globals: # https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-specification-template-anatomy-globals.html
   Function:
     Timeout: 5
@@ -17,6 +15,7 @@ Globals: # https://docs.aws.amazon.com/serverless-application-model/latest/devel
       LogFormat: JSON
   Api:
     TracingEnabled: true
+
 Resources:
   BoardGamesTable:
     Type: AWS::DynamoDB::Table
@@ -34,6 +33,7 @@ Resources:
     Properties:
       CodeUri: src/api/board_game/add
       Handler: add_board_game.lambda_handler
+      Runtime: python3.12
       Tracing: Active
       Events:
         AddBoardGame:
@@ -41,6 +41,7 @@ Resources:
           Properties:
             Path: /boardgames
             Method: post
+            RestApiId: !Ref BoardGameAPI
       Environment:
         Variables:
           BOARD_GAMES_TABLE: !Ref BoardGamesTable
@@ -48,29 +49,11 @@ Resources:
         - DynamoDBWritePolicy:
             TableName: !Ref BoardGamesTable
 
-  HelloWorldFunction:
-    Type: AWS::Serverless::Function     # More info about Function Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html
+  BoardGameAPI:
+    Type: AWS::Serverless::Api
     Properties:
-      Handler: app.lambda_handler
-      CodeUri: hello_world
-      Description: Hello World function
-      Architectures:
-      - x86_64
-      Tracing: Active
-      Events:
-        HelloPath:
-          Type: Api           # More info about API Event Source: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-property-function-api.html
-          Properties:
-            Path: /hello
-            Method: GET
-             # Powertools env vars: https://awslabs.github.io/aws-lambda-powertools-python/#environment-variables
-      Environment:
-        Variables:
-          POWERTOOLS_SERVICE_NAME: PowertoolsHelloWorld
-          POWERTOOLS_METRICS_NAMESPACE: Powertools
-          LOG_LEVEL: INFO
-      Tags:
-        LambdaPowertools: python
+      StageName: Prod
+      TracingEnabled: true
 
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
@@ -86,15 +69,15 @@ Resources:
         Ref: ApplicationResourceGroup
       AutoConfigurationEnabled: 'true'
 Outputs:
-  HelloWorldApi:
-    Description: API Gateway endpoint URL for Prod environment for Hello World Function
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello"
 
-  HelloWorldFunction:
-    Description: Hello World Lambda Function ARN
-    Value: !GetAtt HelloWorldFunction.Arn
+  AddBoardGameFunctionArn:
+    Description: Add Board Game Lambda Function ARN
+    Value: !GetAtt AddBoardGameFunction.Arn
 
   BoardGamesTable:
     Description: "Board Games DynamoDB Table"
     Value: !Ref BoardGamesTable
 
+  APIEndpoint:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${BoardGameAPI}.execute-api.${AWS::Region}.amazonaws.com/Prod"
