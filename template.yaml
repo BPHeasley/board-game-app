@@ -29,6 +29,24 @@ Resources:
           KeyType: "HASH"
       BillingMode: PAY_PER_REQUEST
 
+  AddBoardGameFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/api/board_game/add
+      Handler: add_board_game.lambda_handler
+      Tracing: Active
+      Events:
+        AddBoardGame:
+          Type: Api
+          Properties:
+            Path: /boardgames
+            Method: post
+      Environment:
+        Variables:
+          BOARD_GAMES_TABLE: !Ref BoardGamesTable
+      Policies:
+        - DynamoDBWritePolicy:
+            TableName: !Ref BoardGamesTable
 
   HelloWorldFunction:
     Type: AWS::Serverless::Function     # More info about Function Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html
