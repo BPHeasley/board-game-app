@@ -31,6 +31,8 @@ Resources:
       AttributeDefinitions:
         - AttributeName: "title"
           AttributeType: "S"
+        - AttributeName: "players"
+          AttributeType: "N"
       KeySchema: # Specifies the primary key. For Board Games, it is the title of the board game
         - AttributeName: "title"
           KeyType: "HASH"
