@@ -47,7 +47,7 @@ Resources:
           Properties:
             Path: /boardgames
             Method: post
-            RestApiId: !Ref BoardGameAPI
+#            RestApiId: !Ref BoardGameAPI
       Policies:
         - DynamoDBWritePolicy:
             TableName: !Ref BoardGamesTable
@@ -55,12 +55,12 @@ Resources:
         Variables:
           TABLE_NAME: !Ref BoardGamesTable
 
-  BoardGameAPI:
-    Type: AWS::Serverless::Api
-    Properties:
-      StageName: Prod
-      OpenApiVersion: 3.0.1
-      TracingEnabled: true
+#  BoardGameAPI:
+#    Type: AWS::Serverless::Api
+#    Properties:
+#      StageName: Prod
+#      OpenApiVersion: 3.0.1
+#      TracingEnabled: true
 
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
@@ -85,6 +85,6 @@ Outputs:
     Description: "Board Games DynamoDB Table"
     Value: !Ref BoardGamesTable
 
-  APIEndpoint:
-    Description: "API Gateway endpoint URL"
-    Value: !Sub "https://${BoardGameAPI}.execute-api.${AWS::Region}.amazonaws.com/Prod"
+#  APIEndpoint:
+#    Description: "API Gateway endpoint URL"
+#    Value: !Sub "https://${BoardGameAPI}.execute-api.${AWS::Region}.amazonaws.com/Prod"
