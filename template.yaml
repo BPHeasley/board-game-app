@@ -13,6 +13,13 @@ Globals: # https://docs.aws.amazon.com/serverless-application-model/latest/devel
     # You can add LoggingConfig parameters such as the Logformat, Log Group, and SystemLogLevel or ApplicationLogLevel. Learn more here https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html#sam-function-loggingconfig.
     LoggingConfig:
       LogFormat: JSON
+    Environment:
+      Variables:
+        LOG_LEVEL: INFO
+        POWERTOOLS_LOGGER_LOG_EVENT: TRUE
+        POWERTOOLS_LOGGER_SAMPLE_RATE: 0.1
+        POWERTOOLS_SERVICE_NAME: board-game-app
+        POWERTOOLS_METRICS_NAMESPACE: BoardGameApp
   Api:
     TracingEnabled: true
 
@@ -31,10 +38,7 @@ Resources:
   AddBoardGameFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: src/api/board_game/add
       Handler: add_board_game.lambda_handler
-      Runtime: python3.12
-      Tracing: Active
       Events:
         AddBoardGame:
           Type: Api
@@ -53,6 +57,7 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: Prod
+      OpenApiVersion: 3.0.1
       TracingEnabled: true
 
   ApplicationResourceGroup:
