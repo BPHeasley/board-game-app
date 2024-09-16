@@ -48,12 +48,12 @@ Resources:
             Path: /boardgames
             Method: post
             RestApiId: !Ref BoardGameAPI
-      Environment:
-        Variables:
-          BOARD_GAMES_TABLE: !Ref BoardGamesTable
       Policies:
         - DynamoDBWritePolicy:
             TableName: !Ref BoardGamesTable
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref BoardGamesTable
 
   BoardGameAPI:
     Type: AWS::Serverless::Api
