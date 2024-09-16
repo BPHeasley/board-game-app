@@ -31,8 +31,12 @@ Resources:
       AttributeDefinitions:
         - AttributeName: "title"
           AttributeType: "S"
+        - AttributeName: "winner"
+          AttributeType: "S"
       KeySchema: # Specifies the primary key. For Board Games, it is the title of the board game
         - AttributeName: "title"
+          KeyType: "HASH"
+        - AttributeName: "winner"
           KeyType: "HASH"
       BillingMode: PAY_PER_REQUEST
 
