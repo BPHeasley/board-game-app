@@ -38,6 +38,7 @@ Resources:
   AddBoardGameFunction:
     Type: AWS::Serverless::Function
     Properties:
+      CodeUri: src/api/board_game/add
       Handler: add_board_game.lambda_handler
       Events:
         AddBoardGame:
