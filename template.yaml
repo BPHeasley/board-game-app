@@ -27,7 +27,7 @@ Resources:
   BoardGamesTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Sub ${AWS::StackName}-BoardGamesTable-Temp
+      TableName: !Sub ${AWS::StackName}-BoardGamesTable
       AttributeDefinitions:
         - AttributeName: "title"
           AttributeType: "S"
@@ -37,7 +37,7 @@ Resources:
         - AttributeName: "title"
           KeyType: "HASH"
         - AttributeName: "winner"
-          KeyType: "HASH"
+          KeyType: "RANGE"
       BillingMode: PAY_PER_REQUEST
 
   AddBoardGameFunction:
