@@ -27,17 +27,13 @@ Resources:
   BoardGamesTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Sub ${AWS::StackName}-BoardGamesTable_Temp
+      TableName: !Sub ${AWS::StackName}-BoardGamesTable
       AttributeDefinitions:
         - AttributeName: "title"
-          AttributeType: "S"
-        - AttributeName: "winner"
           AttributeType: "S"
       KeySchema: # Specifies the primary key. For Board Games, it is the title of the board game
         - AttributeName: "title"
           KeyType: "HASH"
-        - AttributeName: "winner"
-          KeyType: "RANGE"
       BillingMode: PAY_PER_REQUEST
 
   AddBoardGameFunction:

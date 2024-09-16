@@ -1,12 +1,13 @@
 import boto3
 import json
+import os
 
 # from aws_lambda_powertools import Logger
 
 # logger = Logger()
 
 dynamodb = boto3.resource('dynamodb')
-
+board_games_table = os.getenv('TABLE_NAME')
 
 def add_board_game(event: dict):
     # logger.info("Adding a new board game")
@@ -19,7 +20,7 @@ def add_board_game(event: dict):
             'title': board_game_title,
         }
     }
-    table = dynamodb.Table('BoardGamesTable')
+    table = dynamodb.Table(board_games_table)
 
     table.put_item(Item=ddb_item, ConditionExpression='attribute_not_exists(title)')
 
