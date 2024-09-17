@@ -54,6 +54,8 @@ Resources:
       Environment:
         Variables:
           TABLE_NAME: !Ref BoardGamesTable
+      Tags:
+        Stack: !Sub "${AWS::StackName}"
   GetBoardGameFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -72,6 +74,8 @@ Resources:
       Environment:
         Variables:
           TABLE_NAME: !Ref BoardGamesTable
+      Tags:
+        Stack: !Sub "${AWS::StackName}"
   GetAllBoardGamesFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -90,6 +94,8 @@ Resources:
       Environment:
         Variables:
           TABLE_NAME: !Ref BoardGamesTable
+      Tags:
+        Stack: !Sub "${AWS::StackName}"
 
   BoardGameAPI:
     Type: AWS::Serverless::Api
