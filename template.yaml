@@ -107,24 +107,25 @@ Resources:
         Name: !Sub "${AWS::StackName}-API"
         Stack: !Sub "${AWS::StackName}"
 
-  ApplicationResourceGroup:
-    Type: AWS::ResourceGroups::Group
-    Properties:
-      Name:
-        Fn::Sub: ApplicationInsights-SAM-${AWS::StackName}
-      ResourceQuery:
-        Type: CLOUDFORMATION_STACK_1_0
-  ApplicationInsightsMonitoring:
-    Type: AWS::ApplicationInsights::Application
-    Properties:
-      ResourceGroupName:
-        Ref: ApplicationResourceGroup
-      AutoConfigurationEnabled: 'true'
+#  ApplicationResourceGroup:
+#    Type: AWS::ResourceGroups::Group
+#    Properties:
+#      Name:
+#        Fn::Sub: ApplicationInsights-SAM-${AWS::StackName}
+#      ResourceQuery:
+#        Type: CLOUDFORMATION_STACK_1_0
+#  ApplicationInsightsMonitoring:
+#    Type: AWS::ApplicationInsights::Application
+#    Properties:
+#      ResourceGroupName:
+#        Ref: ApplicationResourceGroup
+#      AutoConfigurationEnabled: 'true'
+
 Outputs:
 
-  AddBoardGameFunctionArn:
-    Description: Add Board Game Lambda Function ARN
-    Value: !GetAtt AddBoardGameFunction.Arn
+  AddBoardGameFunction:
+    Description: Add Board Game Lambda Function
+    Value: !Ref AddBoardGameFunction
 
   BoardGamesTable:
     Description: "Board Games DynamoDB Table"
