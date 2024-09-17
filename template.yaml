@@ -54,6 +54,23 @@ Resources:
       Environment:
         Variables:
           TABLE_NAME: !Ref BoardGamesTable
+  GetBoardGameFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/api/board_game/get
+      Handler: get_board_game.lambda_handler
+      Events:
+        GetBoardGame:
+          Type: Api
+          Properties:
+            Path: /boardgames/{title}
+            Method: get
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref BoardGamesTable
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref BoardGamesTable
 
 #  BoardGameAPI:
 #    Type: AWS::Serverless::Api

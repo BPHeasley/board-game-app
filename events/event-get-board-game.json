@@ -1,7 +1,7 @@
 {
-    "resource": "/boardgames",
+    "resource": "/boardgames/{title}",
     "path": "/boardgames",
-    "httpMethod": "POST",
+    "httpMethod": "GET",
     "multiValueHeaders": null,
     "queryStringParameters": null,
     "multiValueQueryStringParameters": null,
@@ -10,6 +10,6 @@
     "requestContext": {
         "requestId": "be946131-30c4-4396-9c29-f25f8caa91dc"
     },
-    "body": "{\"title\":\"test game\"}",
+    "body": null,
     "isBase64Encoded": false
 }
