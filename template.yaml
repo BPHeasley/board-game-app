@@ -8,7 +8,6 @@ Globals: # https://docs.aws.amazon.com/serverless-application-model/latest/devel
     Timeout: 5
     MemorySize: 128
     Runtime: python3.12
-
     Tracing: Active
     # You can add LoggingConfig parameters such as the Logformat, Log Group, and SystemLogLevel or ApplicationLogLevel. Learn more here https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html#sam-function-loggingconfig.
     LoggingConfig:
@@ -67,7 +66,7 @@ Resources:
           Properties:
             Path: /boardgames/{title}
             Method: get
-            RestApiId: BoardGameAPI
+            RestApiId: !Ref BoardGameAPI
       Policies:
         - DynamoDBReadPolicy:
             TableName: !Ref BoardGamesTable
@@ -87,7 +86,7 @@ Resources:
           Properties:
             Path: /boardgames
             Method: get
-            RestApiId: BoardGameAPI
+            RestApiId: !Ref BoardGameAPI
       Policies:
         - DynamoDBReadPolicy:
             TableName: !Ref BoardGamesTable
