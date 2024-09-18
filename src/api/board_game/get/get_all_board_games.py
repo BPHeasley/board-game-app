@@ -16,8 +16,8 @@ def lambda_handler(event, context):
     try:
         ddb_response = ddbTable.scan(Select='ALL_ATTRIBUTES')
 
-        if 'Item' in ddb_response:
-            response_body = ddb_response['Item']
+        if 'Items' in ddb_response:
+            response_body = ddb_response['Items']
             status_code = 200
         else:
             response_body = {}
