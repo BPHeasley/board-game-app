@@ -88,7 +88,7 @@ def lambda_handler(event, context):
     # Allow all public resources/methods explicitly
 
     # Add specific resources/methods
-    policy.allow_method(HttpVerb.GET, "/boardgames/")
+    policy.allow_method(HttpVerb.GET, "/boardgames")
     policy.allow_method(HttpVerb.GET, "/boardgames/*")
 
     # Look for admin group in Cognito groups
