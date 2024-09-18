@@ -74,6 +74,7 @@ def lambda_handler(event, context):
     aws_account_id = tmp[4]
     # validate the incoming token
     validated_decoded_token = validate_token(event['authorizationToken'], region)
+    print(validated_decoded_token)
     if not validated_decoded_token:
         raise Exception('Unauthorized')
     principal_id = validated_decoded_token['sub']
@@ -99,6 +100,8 @@ def lambda_handler(event, context):
         policy.allow_method(HttpVerb.POST, "boardgames")
         policy.allow_method(HttpVerb.PUT, "boardgames/*")
         policy.allow_method(HttpVerb.PUT, f"/boardgames/")
+        policy.allow_method(HttpVerb.GET, f"/boardgames/")
+        policy.allow_method(HttpVerb.GET, f"/boardgames/*")
 
     # Finally, build the policy
     auth_response = policy.build()
