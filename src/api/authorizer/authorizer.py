@@ -87,23 +87,23 @@ def lambda_handler(event, context):
     # Allow all public resources/methods explicitly
 
     # Add user specific resources/methods
-    policy.allow_method(HttpVerb.GET, f"/users/{principal_id}")
-    policy.allow_method(HttpVerb.PUT, f"/users/{principal_id}")
-    policy.allow_method(HttpVerb.DELETE, f"/users/{principal_id}")
-    policy.allow_method(HttpVerb.GET, f"/users/{principal_id}/*")
-    policy.allow_method(HttpVerb.PUT, f"/users/{principal_id}/*")
-    policy.allow_method(HttpVerb.DELETE, f"/users/{principal_id}/*")
+    policy.allow_method(HttpVerb.GET, f"/boardgames/{principal_id}")
+    policy.allow_method(HttpVerb.PUT, f"/boardgames/{principal_id}")
+    policy.allow_method(HttpVerb.DELETE, f"/boardgames/{principal_id}")
+    policy.allow_method(HttpVerb.GET, f"/boardgames/{principal_id}/*")
+    policy.allow_method(HttpVerb.PUT, f"/boardgames/{principal_id}/*")
+    policy.allow_method(HttpVerb.DELETE, f"/boardgames/{principal_id}/*")
 
     # Look for admin group in Cognito groups
     # Assumption: admin group always has higher precedence
     if 'cognito:groups' in validated_decoded_token and validated_decoded_token['cognito:groups'][0] == admin_group_name:
         # add administrative privileges
-        policy.allow_method(HttpVerb.GET, "users")
-        policy.allow_method(HttpVerb.GET, "users/*")
-        policy.allow_method(HttpVerb.DELETE, "users")
-        policy.allow_method(HttpVerb.DELETE, "users/*")
-        policy.allow_method(HttpVerb.POST, "users")
-        policy.allow_method(HttpVerb.PUT, "users/*")
+        policy.allow_method(HttpVerb.GET, "boardgames")
+        policy.allow_method(HttpVerb.GET, "boardgames/*")
+        policy.allow_method(HttpVerb.DELETE, "boardgames")
+        policy.allow_method(HttpVerb.DELETE, "boardgames/*")
+        policy.allow_method(HttpVerb.POST, "boardgames")
+        policy.allow_method(HttpVerb.PUT, "boardgames/*")
 
     # Finally, build the policy
     auth_response = policy.build()
