@@ -86,13 +86,11 @@ def lambda_handler(event, context):
     # *** Section 2 : authorization rules
     # Allow all public resources/methods explicitly
 
-    # Add user specific resources/methods
-    policy.allow_method(HttpVerb.GET, f"/boardgames/{principal_id}")
-    policy.allow_method(HttpVerb.PUT, f"/boardgames/{principal_id}")
-    policy.allow_method(HttpVerb.DELETE, f"/boardgames/{principal_id}")
-    policy.allow_method(HttpVerb.GET, f"/boardgames/{principal_id}/*")
-    policy.allow_method(HttpVerb.PUT, f"/boardgames/{principal_id}/*")
-    policy.allow_method(HttpVerb.DELETE, f"/boardgames/{principal_id}/*")
+    # Add specific resources/methods
+    policy.allow_method(HttpVerb.GET, f"/boardgames/")
+    policy.allow_method(HttpVerb.PUT, f"/boardgames/")
+    policy.allow_method(HttpVerb.GET, f"/boardgames/*")
+    policy.allow_method(HttpVerb.PUT, f"/boardgames/*")
 
     # Look for admin group in Cognito groups
     # Assumption: admin group always has higher precedence
