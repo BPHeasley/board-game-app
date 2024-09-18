@@ -119,6 +119,11 @@ Resources:
             Identity:
               Headers:
                 - Authorization
+      MethodSettings:
+        - ResourcePath: /*
+          HttpMethod: '*'
+          ThrottlingRateLimit: 100
+          ThrottlingBurstLimit: 50
 
   UserPool:
     Type: AWS::Cognito::UserPool
