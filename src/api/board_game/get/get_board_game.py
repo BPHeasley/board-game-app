@@ -6,7 +6,7 @@ import os
 
 # logger = Logger()
 
-dynamodb = boto3.resource('dynamodb')
+dynamodb = boto3.resource('dynamodb',  region_name='us-east-1')
 board_games_table = os.getenv('TABLE_NAME')
 ddbTable = dynamodb.Table(board_games_table)
 
