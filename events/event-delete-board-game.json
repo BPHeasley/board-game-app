@@ -1,7 +1,7 @@
 {
   "resource": "boardgames/{title}",
   "path": "/boardgames/",
-  "httpMethod": "GET",
+  "httpMethod": "DELETE",
   "headers": null,
   "multiValueHeaders": null,
   "queryStringParameters": null,

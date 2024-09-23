@@ -1,5 +1,4 @@
 import os
-
 import boto3
 
 import json
@@ -12,17 +11,23 @@ ddbTable = dynamodb.Table(board_games_table)
 def lambda_handler(event, context):
     status_code = 400  # default response
     try:
-        ddb_response = ddbTable.delete_item(
+        title = event['pathParameters']['title']
+        ddb_response = ddbTable.get_item(
             Key={
-                'title': event['pathParameters']['title']
+                'title': title
             }
         )
 
         if 'Item' in ddb_response:
-            response_body = ddb_response['Item']
-            status_code = 200
+            delete_ddb_response = ddbTable.delete_item(
+                Key={
+                    'title': title
+                }
+            )
+            response_body = f"{title} was removed from db"
         else:
-            response_body = "Item not found"
+            response_body = f"{title} was not in db"
+
     except Exception as e:
         response_body = str(e)
 
