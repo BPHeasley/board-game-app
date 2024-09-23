@@ -26,7 +26,7 @@ def my_test_environment():
 @mock_aws
 def set_up_dynamodb():
     conn = boto3.client(
-        'dynamodb'
+        'dynamodb', region_name='us-east-1'
     )
     conn.create_table(
         TableName=MOCK_BOARD_GAME_TABLE_NAME,
