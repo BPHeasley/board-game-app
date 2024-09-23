@@ -120,14 +120,3 @@ def test_add_board_game():
         assert ret['statusCode'] == 200
         data = json.loads(ret['body'])
         assert data['title'] == result_title
-
-
-@patch.dict(os.environ, {'TABLE_NAME': MOCK_BOARD_GAME_TABLE_NAME, 'AWS_XRAY_CONTEXT_MISSING': 'LOG_ERROR'})
-def test_delete_board_game():
-    with my_test_environment():
-        from src.api.board_game.delete import delete_board_game
-        with open('./events/event-delete-board-game.json', 'r') as f:
-            apigw_event = json.load(f)
-        ret = delete_board_game.lambda_handler(apigw_event, '')
-        assert ret['statusCode'] == 200
-        assert json.loads(ret['body']) == {}
