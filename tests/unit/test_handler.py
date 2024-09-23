@@ -45,7 +45,7 @@ def set_up_dynamodb():
 
 def put_data_dynamodb():
     conn = boto3.client(
-        'dynamodb'
+        'dynamodb', region_name='us-east-1'
     )
     conn.put_item(
         TableName=MOCK_BOARD_GAME_TABLE_NAME,
