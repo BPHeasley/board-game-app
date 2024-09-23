@@ -7,7 +7,7 @@
   "queryStringParameters": null,
   "multiValueQueryStringParameters": null,
   "pathParameters": {
-    "title": "test-title"
+    "title": "test title"
   },
   "stageVariables": null,
   "body": null,
