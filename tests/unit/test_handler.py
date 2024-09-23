@@ -4,29 +4,26 @@
 import json
 import os
 import boto3
-import uuid
 import pytest
-from moto import mock_dynamodb
+# from moto import mock_dynamodb
+from moto import mock_aws
 from contextlib import contextmanager
 from unittest.mock import patch
 
 MOCK_BOARD_GAME_TABLE_NAME = 'MockBoardGames'
-MOCK_BOARD_GAME_TITLE = 'unit-test-title'
-MOCK_BOARD_GAME_TITLE_2 = 'unit-test-title-2'
-
-
-def mock_game():
-    return MOCK_BOARD_GAME_TITLE
+MOCK_BOARD_GAME_TITLE = 'test-title'
+MOCK_BOARD_GAME_TITLE_2 = 'test-title 2'
 
 
 @contextmanager
 def my_test_environment():
-    with mock_dynamodb():
+    with mock_aws():
         set_up_dynamodb()
         put_data_dynamodb()
         yield
 
 
+@mock_aws
 def set_up_dynamodb():
     conn = boto3.client(
         'dynamodb'
@@ -67,7 +64,7 @@ def put_data_dynamodb():
 @patch.dict(os.environ, {'TABLE_NAME': MOCK_BOARD_GAME_TABLE_NAME, 'AWS_XRAY_CONTEXT_MISSING': 'LOG_ERROR'})
 def test_get_list_of_board_games():
     with my_test_environment():
-        from src.api.board_game import get
+        from src.api.board_game.get import get_all_board_games
         with open('./events/event-get-all-board-games.json', 'r') as f:
             apigw_get_all_board_games_event = json.load(f)
         expected_response = [
@@ -78,57 +75,59 @@ def test_get_list_of_board_games():
                 'title': MOCK_BOARD_GAME_TITLE_2,
             }
         ]
-        ret = get.get_all_board_games.lambda_handler(apigw_get_all_board_games_event, '')
+        ret = get_all_board_games.lambda_handler(apigw_get_all_board_games_event, '')
         assert ret['statusCode'] == 200
         data = json.loads(ret['body'])
         assert data == expected_response
 
 
+@patch.dict(os.environ, {'TABLE_NAME': MOCK_BOARD_GAME_TABLE_NAME, 'AWS_XRAY_CONTEXT_MISSING': 'LOG_ERROR'})
 def test_get_single_board_game():
     with my_test_environment():
-        from src.api.board_game import get
+        from src.api.board_game.get import get_board_game
         with open('./events/event-get-board-game-by-title.json', 'r') as f:
             apigw_event = json.load(f)
         expected_response = {
             'title': MOCK_BOARD_GAME_TITLE
         }
-        ret = get.get_board_game.lambda_handler(apigw_event, '')
+        ret = get_board_game.lambda_handler(apigw_event, '')
         assert ret['statusCode'] == 200
         data = json.loads(ret['body'])
         assert data == expected_response
 
 
+@patch.dict(os.environ, {'TABLE_NAME': MOCK_BOARD_GAME_TABLE_NAME, 'AWS_XRAY_CONTEXT_MISSING': 'LOG_ERROR'})
 def test_get_single_board_game_wrong_title():
     with my_test_environment():
-        from src.api.board_game import get
+        from src.api.board_game.get import get_board_game
         with open('./events/event-get-board-game-by-title.json', 'r') as f:
             apigw_event = json.load(f)
         apigw_event['pathParameters']['title'] = 'wrong-title'
         apigw_event['rawPath'] = '/boardgames/wrong-title'
-        ret = get.get_board_game.lambda_handler(apigw_event, '')
+        ret = get_board_game.lambda_handler(apigw_event, '')
         assert ret['statusCode'] == 404
         assert json.loads(ret['body']) == {}
 
 
-# @patch('uuid.uuid1', mock_uuid)
-# @pytest.mark.freeze_time('2001-01-01')
+@patch.dict(os.environ, {'TABLE_NAME': MOCK_BOARD_GAME_TABLE_NAME, 'AWS_XRAY_CONTEXT_MISSING': 'LOG_ERROR'})
 def test_add_board_game():
     with my_test_environment():
-        from src.api.board_game import add
+        result_title = 'test title'
+        from src.api.board_game.add import add_board_game
         with open('./events/event-add-board-game.json', 'r') as f:
             apigw_event = json.load(f)
-        expected_response = json.loads(apigw_event['body'])
-        ret = add.add_board_game.lambda_handler(apigw_event, '')
+        ret = add_board_game.lambda_handler(apigw_event, '')
         assert ret['statusCode'] == 200
         data = json.loads(ret['body'])
-        assert data['title'] == MOCK_BOARD_GAME_TITLE
+        assert data['title'] == result_title
 
 
-# def test_delete_board_game():
-#     with my_test_environment():
-#         from src.api.board_game import delete
-#         with open('./events/event-delete-user-by-id.json', 'r') as f:
-#             apigw_event = json.load(f)
-#         ret = delete.delete_board_game.lambda_handler(apigw_event, '')
-#         assert ret['statusCode'] == 200
-#         assert json.loads(ret['body']) == {}
+@patch.dict(os.environ, {'TABLE_NAME': MOCK_BOARD_GAME_TABLE_NAME, 'AWS_XRAY_CONTEXT_MISSING': 'LOG_ERROR'})
+def test_delete_board_game():
+    with my_test_environment():
+        from src.api.board_game.delete import delete_board_game
+        with open('./events/event-delete-board-game.json', 'r') as f:
+            apigw_event = json.load(f)
+        ret = delete_board_game.lambda_handler(apigw_event, '')
+        assert ret['statusCode'] == 200
+        assert json.loads(ret['body']) == {}

@@ -9,6 +9,7 @@ import os
 dynamodb = boto3.resource('dynamodb')
 board_games_table = os.getenv('TABLE_NAME')
 
+
 def add_board_game(event: dict):
     # logger.info("Adding a new board game")
     board_game_detail = json.loads(event['body'])

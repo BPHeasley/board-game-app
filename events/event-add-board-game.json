@@ -7,9 +7,6 @@
     "multiValueQueryStringParameters": null,
     "pathParameters": null,
     "stageVariables": null,
-    "requestContext": {
-        "requestId": "be946131-30c4-4396-9c29-f25f8caa91dc"
-    },
-    "body": "{\"title\":\"test game\"}",
+    "body": "{\"title\":\"test title\"}",
     "isBase64Encoded": false
 }

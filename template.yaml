@@ -101,6 +101,26 @@ Resources:
           TABLE_NAME: !Ref BoardGamesTable
       Tags:
         Stack: !Sub "${AWS::StackName}"
+  DeleteBoardGameFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/api/board_game/delete
+      Handler: delete_board_game.lambda_handler
+      Events:
+        DeleteBoardGame:
+          Type: Api
+          Properties:
+            Path: /boardgames/{title}
+            Method: delete
+            RestApiId: !Ref BoardGameAPI
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref BoardGamesTable
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref BoardGamesTable
+      Tags:
+        Stack: !Sub "${AWS::StackName}"
 
   BoardGameAPI:
     Type: AWS::Serverless::Api
