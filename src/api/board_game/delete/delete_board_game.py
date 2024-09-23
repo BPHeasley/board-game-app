@@ -24,6 +24,7 @@ def lambda_handler(event, context):
                     'title': title
                 }
             )
+            status_code = 200
             response_body = f"{title} was removed from db"
         else:
             response_body = f"{title} was not in db"
