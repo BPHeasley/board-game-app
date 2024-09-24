@@ -224,6 +224,23 @@ Resources:
       Tags:
         Stack: !Sub "${AWS::StackName}"
 
+  BoardGamesBucketFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/util/s3
+      Handler: upload.lambda_handler
+      Runtime: python3.12
+      Timeout: 5
+      MemorySize: 128
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Ref BoardGameBucket
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref BoardGameBucket
+      Tags:
+        Stack: !Sub "${AWS::StackName}"
+
   BoardGameBucket:
     Type: AWS::S3::Bucket
     Properties:
@@ -240,6 +257,23 @@ Resources:
       Tags:
         - Key: Stack
           Value: !Sub "${AWS::StackName}"
+
+  BoardGameBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref BoardGameBucket
+      PolicyDocument:
+        Statement:
+          - Sid: AllowGetPutListObject
+            Effect: Allow
+            Principal: "*"
+            Action:
+              - "s3:GetObject"
+              - "s3:PutObject"
+              - "s3:ListBucket"
+            Resource:
+              - !GetAtt BoardGameBucket.Arn
+              - !Sub "${BoardGameBucket.Arn}/*"
 
 Outputs:
 
