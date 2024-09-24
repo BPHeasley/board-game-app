@@ -15,7 +15,7 @@ env:
   TESTING_PIPELINE_EXECUTION_ROLE: arn:aws:iam::026090513926:role/aws-sam-cli-managed-dev-pipel-PipelineExecutionRole-EWLSP08MMAD7
   TESTING_CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::026090513926:role/aws-sam-cli-managed-dev-p-CloudFormationExecutionRo-ukXzpiu7YbRm
   TESTING_ARTIFACTS_BUCKET: aws-sam-cli-managed-dev-pipeline-r-artifactsbucket-bulapaqx2gw5
-  TESTING_WEBSITE_BUCKET: s3://board-game-app-dev-boardgamebucket
+  TESTING_WEBSITE_BUCKET: s3://board-game-app-dev-boardgamebucket/
   # If there are functions with "Image" PackageType in your template,
   # uncomment the line below and add "--image-repository ${TESTING_IMAGE_REPOSITORY}" to
   # testing "sam package" and "sam deploy" commands.
@@ -25,7 +25,7 @@ env:
   PROD_PIPELINE_EXECUTION_ROLE: arn:aws:iam::026090513926:role/aws-sam-cli-managed-prod-pipe-PipelineExecutionRole-SFOLDBvU1V7T
   PROD_CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::026090513926:role/aws-sam-cli-managed-prod--CloudFormationExecutionRo-dy58WYLd4SeH
   PROD_ARTIFACTS_BUCKET: aws-sam-cli-managed-prod-pipeline--artifactsbucket-gtjqtnssqzw5
-  PROD_WEBSITE_BUCKET: s3://board-game-app-prod-boardgamebucket
+  PROD_WEBSITE_BUCKET: s3://board-game-app-prod-boardgamebucket/
   # If there are functions with "Image" PackageType in your template,
   # uncomment the line below and add "--image-repository ${PROD_IMAGE_REPOSITORY}" to
   # prod "sam package" and "sam deploy" commands.
