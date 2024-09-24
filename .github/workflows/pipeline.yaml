@@ -195,7 +195,7 @@ jobs:
             --no-fail-on-empty-changeset \
             --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE}
           # trigger the upload here
-          aws s3 sync ./src/pages/ TESTING_WEBSITE_BUCKET
+          aws s3 sync ./src/pages/ ${TESTING_WEBSITE_BUCKET}
 
   integration-test:
     if: github.ref == 'refs/heads/main'
@@ -261,4 +261,4 @@ jobs:
             --no-fail-on-empty-changeset \
             --role-arn ${PROD_CLOUDFORMATION_EXECUTION_ROLE}
           # trigger the upload here
-          aws s3 sync ./src/pages/ PROD_WEBSITE_BUCKET
+          aws s3 sync ./src/pages/ ${PROD_WEBSITE_BUCKET}
