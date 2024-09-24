@@ -248,7 +248,6 @@ Resources:
       AccessControl: Private
       PublicAccessBlockConfiguration:
         BlockPublicAcls: TRUE
-        BlockPublicPolicy: TRUE
         IgnorePublicAcls: TRUE
         RestrictPublicBuckets: TRUE
       WebsiteConfiguration:
