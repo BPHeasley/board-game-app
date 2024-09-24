@@ -224,6 +224,23 @@ Resources:
       Tags:
         Stack: !Sub "${AWS::StackName}"
 
+  BoardGameBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${AWS::StackName}-boardgamebucket"
+      AccessControl: Private
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: TRUE
+        BlockPublicPolicy: TRUE
+        IgnorePublicAcls: TRUE
+        RestrictPublicBuckets: TRUE
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+      Tags:
+        - Key: Stack
+          Value: !Sub "${AWS::StackName}"
+
 Outputs:
 
   AddBoardGameFunction:
