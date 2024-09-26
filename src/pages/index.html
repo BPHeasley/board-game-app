@@ -1,9 +1,28 @@
-<html xmlns="http://www.w3.org/1999/xhtml" >
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>My Website Home Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static Page with Database Data</title>
+    <script>
+        async function get_all_board_games() {
+            try {
+                const response = await fetch("https://49msq1riwa.execute-api.us-east-1.amazonaws.com/Prod/boardgames");
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById("data-output").textContent = JSON.stringify(data, null, 2);
+                } else {
+                    document.getElementById("data-output").textContent = "Failed to load data.";
+                }
+            } catch (error) {
+                document.getElementById("data-output").textContent = "Error: " + error.message;
+            }
+        }
+    </script>
 </head>
 <body>
-  <h1>Welcome to my website</h1>
-  <p>Now hosted on Amazon S3!</p>
+    <h1>Database Data</h1>
+    <button onclick="fetchData()">Load Data from Database</button>
+    <pre id="data-output"></pre>
 </body>
 </html>
