@@ -132,10 +132,11 @@ Resources:
         Name: !Sub "${AWS::StackName}-API"
         Stack: !Sub "${AWS::StackName}"
       Auth:
-        DefaultAuthorizer: LambdaTokenAuthorizer
+        DefaultAuthorizer: LambdaRequestAuthorizer
         Authorizers:
-          LambdaTokenAuthorizer:
+          LambdaRequestAuthorizer:
             FunctionArn: !GetAtt AuthorizerFunction.Arn
+            FunctionInvokeRole: !GetAtt AuthorizerFunctionRole.Arn
             Identity:
               Headers:
                 - Authorization
