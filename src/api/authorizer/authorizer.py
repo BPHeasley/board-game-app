@@ -74,9 +74,8 @@ def lambda_handler(event, context):
     aws_account_id = tmp[4]
     # validate the incoming token
     validated_decoded_token = validate_token(event['authorizationToken'], region)
-    print(validated_decoded_token)
-    if not validated_decoded_token:
-        raise Exception('Unauthorized')
+    # if not validated_decoded_token:
+    #     raise Exception('Unauthorized')
     principal_id = validated_decoded_token['sub']
     # initialize the policy
     policy = AuthPolicy(principal_id, aws_account_id)
