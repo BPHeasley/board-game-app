@@ -232,7 +232,6 @@ Resources:
       PublicAccessBlockConfiguration:
         BlockPublicAcls: TRUE
         IgnorePublicAcls: TRUE
-        RestrictPublicBuckets: TRUE
       WebsiteConfiguration:
         IndexDocument: index.html
         ErrorDocument: error.html
