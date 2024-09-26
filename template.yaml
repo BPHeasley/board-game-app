@@ -259,14 +259,12 @@ Resources:
           - Action:
               - "s3:GetObject"
             Effect: "Allow"
-            Resource:
-              Fn::Join:
-                - ""
-                - - !GetAtt BoardGameBucket.Arn
-                  - "/*"
-                  - "/*"
-                  - "/*"
-              Principal: "*"
+            Resource: !Join
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref BoardGameBucket
+                - /*
+            Principal: "*"
 
 Outputs:
 
