@@ -232,6 +232,9 @@ Resources:
       AccessControl: Private
       PublicAccessBlockConfiguration:
         BlockPublicAcls: TRUE
+        BlockPublicPolicy: FALSE
+        IgnorePublicAcls: TRUE
+        RestrictPublicBuckets: FALSE
       WebsiteConfiguration:
         IndexDocument: index.html
         ErrorDocument: error.html
