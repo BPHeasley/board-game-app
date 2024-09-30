@@ -283,7 +283,6 @@ Resources:
             - HEAD
             - OPTIONS
           Compress: true
-          CachePolicyId: !Ref CloudFrontCachePolicy
           TargetOriginId: S3Origin
           ViewerProtocolPolicy: redirect-to-https
         Origins:
