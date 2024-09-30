@@ -287,7 +287,7 @@ Resources:
           ViewerProtocolPolicy: redirect-to-https
         Origins:
           - Id: S3Origin
-            DomainName: !Sub "${Bucket}.s3.${AWS::Region}.amazonaws.com"
+            DomainName: !Sub "${BoardGameBucket}.s3.${AWS::Region}.amazonaws.com"
             OriginPath: !Sub "/${BoardGameBucket.Name}"
             CustomOriginConfig:
               HTTPSPort: 443
