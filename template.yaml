@@ -297,6 +297,7 @@ Resources:
             OriginPath: "/Prod"
             CustomOriginConfig:
               HTTPSPort: 443
+              OriginProtocolPolicy: https-only
 
 Outputs:
 
