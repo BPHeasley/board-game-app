@@ -231,9 +231,9 @@ Resources:
       BucketName: !Sub "${AWS::StackName}-boardgamebucket"
       AccessControl: Private
       PublicAccessBlockConfiguration:
-        BlockPublicAcls: TRUE
+        BlockPublicAcls: FALSE
         BlockPublicPolicy: FALSE
-        IgnorePublicAcls: TRUE
+        IgnorePublicAcls: FALSE
         RestrictPublicBuckets: FALSE
       WebsiteConfiguration:
         IndexDocument: index.html
