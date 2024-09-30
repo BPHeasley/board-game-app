@@ -33,11 +33,13 @@ def lambda_handler(event, context):
     # Perform authorization to return the Allow policy for correct parameters
     # and the 'Unauthorized' error, otherwise.
 
-    if method == "GET":
+    print(method)
+    if method == "get":
         response = generateAllow('me', event['methodArn'])
         return response
 
-    # if headers['HeaderAuth1'] == "headerValue1" and queryStringParameters['QueryString1'] == "queryValue1" and stageVariables['StageVar1'] == "stageValue1":
+    # if headers['HeaderAuth1'] == "headerValue1" and queryStringParameters['QueryString1'] == "queryValue1"
+    # and stageVariables['StageVar1'] == "stageValue1":
     #     response = generateAllow('me', event['methodArn'])
     #     print('authorized')
     #     return response
