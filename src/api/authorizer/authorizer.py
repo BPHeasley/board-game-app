@@ -27,13 +27,12 @@ def lambda_handler(event, context):
     method = apiGatewayArnTmp[2]
     resource = '/'
 
-    if (apiGatewayArnTmp[3]):
+    if apiGatewayArnTmp[3]:
         resource += apiGatewayArnTmp[3]
 
     # Perform authorization to return the Allow policy for correct parameters
     # and the 'Unauthorized' error, otherwise.
 
-    print(method)
     if method == "GET":
         response = generateAllow('me', event['methodArn'])
         return response

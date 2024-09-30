@@ -265,6 +265,13 @@ Resources:
                 - !Ref BoardGameBucket
                 - /*
             Principal: "*"
+          - Sid: PublicReadGetObject
+            Effect: Allow
+            Principal: "*"
+            Action:
+              - "s3:GetObject"
+            Resource: !Sub "${BoardGameBucket.Arn}/*"
+
 
 Outputs:
 
