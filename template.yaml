@@ -232,13 +232,13 @@ Resources:
       BucketName: !Sub "${AWS::StackName}-boardgamebucket"
       AccessControl: Private
       PublicAccessBlockConfiguration:
-        BlockPublicAcls: FALSE
-        BlockPublicPolicy: FALSE
-        IgnorePublicAcls: FALSE
-        RestrictPublicBuckets: FALSE
-      WebsiteConfiguration:
-        IndexDocument: index.html
-        ErrorDocument: error.html
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+#      WebsiteConfiguration:
+#        IndexDocument: index.html
+#        ErrorDocument: error.html
       Tags:
         - Key: Stack
           Value: !Sub "${AWS::StackName}"
@@ -249,17 +249,55 @@ Resources:
       Bucket: !Ref BoardGameBucket
       PolicyDocument:
         Statement:
-          - Sid: AllowGetPutListObject
-            Effect: Allow
-            Principal: "*"
-            Action:
-              - "s3:GetObject"
-              - "s3:ListBucket"
-              - "s3:PutObject"
-            Resource:
-              - !GetAtt BoardGameBucket.Arn
-              - !Sub "${BoardGameBucket.Arn}/*"
+          - Effect: "Allow"
+            Action: "s3:GetObject"
+            Resource: !Sub "${BoardGameBucket.Arn}/*"
+            Principal:
+              AWS: !Sub 'arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${BoardGameCloudFrontOriginAccessIdentity}'
+#          - Sid: AllowGetPutListObject
+#            Effect: Allow
+#            Principal: "*"
+#            Action:
+#              - "s3:GetObject"
+#              - "s3:ListBucket"
+#              - "s3:PutObject"
+#            Resource:
+#              - !GetAtt BoardGameBucket.Arn
+#              - !Sub "${BoardGameBucket.Arn}/*"
+  BoardGameCloudFrontOriginAccessIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !Ref AWS::StackName
 
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        HttpVersion: http2
+        DefaultRootObject: index.html
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+          Compress: true
+          CachePolicyId: !Ref CloudFrontCachePolicy
+          TargetOriginId: S3Origin
+          ViewerProtocolPolicy: redirect-to-https
+        Origins:
+          - Id: S3Origin
+            DomainName: !Select [1, !Split ["/", !GetAtt BoardGameBucket.DomainName]]
+            OriginPath: !Sub "/${BoardGameBucket.Name}"
+            CustomOriginConfig:
+              HTTPSPort: 443
+              OriginProtocolPolicy: https-only
+          - Id: ApiGatewayOrigin
+            DomainName: !Sub "${BoardGameAPI}.execute-api.${AWS::Region}.amazonaws.com"
+            OriginPath: "/Prod"
+            CustomOriginConfig:
+              HTTPSPort: 443
 
 Outputs:
 
