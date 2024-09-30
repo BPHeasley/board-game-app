@@ -225,6 +225,8 @@ Resources:
       Tags:
         Stack: !Sub "${AWS::StackName}"
 
+  # Setting Bucket policy as per the documentation
+  # https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteAccessPermissionsReqd.html
   BoardGameBucket:
     Type: AWS::S3::Bucket
     Properties:
@@ -248,6 +250,14 @@ Resources:
       Bucket: !Ref BoardGameBucket
       PolicyDocument:
         Statement:
+          - Sid: PublicReadGetObject
+            Effect: Allow
+            Principal: "*"
+            Action:
+              - "s3:GetObject"
+            Resource:
+              - !GetAtt BoardGameBucket.Arn
+              - !Sub "${BoardGameBucket.Arn}/*"
           - Sid: AllowGetPutListObject
             Effect: Allow
             Principal: "*"
@@ -258,15 +268,6 @@ Resources:
             Resource:
               - !GetAtt BoardGameBucket.Arn
               - !Sub "${BoardGameBucket.Arn}/*"
-          - Action:
-              - "s3:GetObject"
-            Effect: "Allow"
-            Resource: !Join
-              - ''
-              - - 'arn:aws:s3:::'
-                - !Ref BoardGameBucket
-                - /*
-            Principal: "*"
 
 
 Outputs:
