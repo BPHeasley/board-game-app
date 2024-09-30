@@ -34,7 +34,7 @@ def lambda_handler(event, context):
     # and the 'Unauthorized' error, otherwise.
 
     print(method)
-    if method == "get":
+    if method == "GET":
         response = generateAllow('me', event['methodArn'])
         return response
 

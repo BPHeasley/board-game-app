@@ -120,3 +120,11 @@ def test_add_board_game():
         assert ret['statusCode'] == 200
         data = json.loads(ret['body'])
         assert data['title'] == result_title
+
+
+def test_authorizer_allow():
+    with open('./events/event-authorizer-allow.json', 'r') as f:
+        apigw_event = json.load(f)
+    from src.api.authorizer import authorizer
+    ret = authorizer.lambda_handler(apigw_event, '')
+    assert ret['policyDocument']['Statement'][0]['Effect'] == 'Allow'
