@@ -255,6 +255,7 @@ Resources:
             Action:
               - "s3:GetObject"
               - "s3:ListBucket"
+              - "s3:PutObject"
             Resource:
               - !GetAtt BoardGameBucket.Arn
               - !Sub "${BoardGameBucket.Arn}/*"
