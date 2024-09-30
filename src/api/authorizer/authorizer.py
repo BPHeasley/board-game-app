@@ -12,18 +12,18 @@ def lambda_handler(event, context):
     print(event)
 
     # Retrieve request parameters from the Lambda function input:
-    headers = event['headers']
-    queryStringParameters = event['queryStringParameters']
-    pathParameters = event['pathParameters']
-    stageVariables = event['stageVariables']
+    # headers = event['headers']
+    # queryStringParameters = event['queryStringParameters']
+    # pathParameters = event['pathParameters']
+    # stageVariables = event['stageVariables']
 
     # Parse the input for the parameter values
     tmp = event['methodArn'].split(':')
     apiGatewayArnTmp = tmp[5].split('/')
-    awsAccountId = tmp[4]
-    region = tmp[3]
-    restApiId = apiGatewayArnTmp[0]
-    stage = apiGatewayArnTmp[1]
+    # awsAccountId = tmp[4]
+    # region = tmp[3]
+    # restApiId = apiGatewayArnTmp[0]
+    # stage = apiGatewayArnTmp[1]
     method = apiGatewayArnTmp[2]
     resource = '/'
 

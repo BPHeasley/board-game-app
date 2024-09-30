@@ -136,7 +136,6 @@ Resources:
         Authorizers:
           LambdaRequestAuthorizer:
             FunctionArn: !GetAtt AuthorizerFunction.Arn
-            FunctionInvokeRole: !GetAtt AuthorizerFunctionRole.Arn
             Identity:
               Headers:
                 - Authorization
@@ -250,20 +249,11 @@ Resources:
       Bucket: !Ref BoardGameBucket
       PolicyDocument:
         Statement:
-          - Sid: PublicReadGetObject
-            Effect: Allow
-            Principal: "*"
-            Action:
-              - "s3:GetObject"
-            Resource:
-              - !GetAtt BoardGameBucket.Arn
-              - !Sub "${BoardGameBucket.Arn}/*"
           - Sid: AllowGetPutListObject
             Effect: Allow
             Principal: "*"
             Action:
               - "s3:GetObject"
-              - "s3:PutObject"
               - "s3:ListBucket"
             Resource:
               - !GetAtt BoardGameBucket.Arn
