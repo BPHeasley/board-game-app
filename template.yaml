@@ -232,10 +232,10 @@ Resources:
       BucketName: !Sub "${AWS::StackName}-boardgamebucket"
       AccessControl: Private
       PublicAccessBlockConfiguration:
-        BlockPublicAcls: true
-        BlockPublicPolicy: true
-        IgnorePublicAcls: true
-        RestrictPublicBuckets: true
+        BlockPublicAcls: FALSE
+        BlockPublicPolicy: FALSE
+        IgnorePublicAcls: FALSE
+        RestrictPublicBuckets: FALSE
 #      WebsiteConfiguration:
 #        IndexDocument: index.html
 #        ErrorDocument: error.html
