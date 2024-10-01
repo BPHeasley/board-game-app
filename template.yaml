@@ -254,16 +254,16 @@ Resources:
             Resource: !Sub "${BoardGameBucket.Arn}/*"
             Principal:
               AWS: !Sub 'arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${BoardGameCloudFrontOriginAccessIdentity}'
-#          - Sid: AllowGetPutListObject
-#            Effect: Allow
-#            Principal: "*"
-#            Action:
-#              - "s3:GetObject"
-#              - "s3:ListBucket"
-#              - "s3:PutObject"
-#            Resource:
-#              - !GetAtt BoardGameBucket.Arn
-#              - !Sub "${BoardGameBucket.Arn}/*"
+          - Sid: AllowGetPutListObject
+            Effect: Allow
+            Principal: "*"
+            Action:
+              - "s3:GetObject"
+              - "s3:ListBucket"
+              - "s3:PutObject"
+            Resource:
+              - !GetAtt BoardGameBucket.Arn
+              - !Sub "${BoardGameBucket.Arn}/*"
   BoardGameCloudFrontOriginAccessIdentity:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
     Properties:
