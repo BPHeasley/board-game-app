@@ -236,9 +236,9 @@ Resources:
         BlockPublicPolicy: FALSE
         IgnorePublicAcls: FALSE
         RestrictPublicBuckets: FALSE
-#      WebsiteConfiguration:
-#        IndexDocument: index.html
-#        ErrorDocument: error.html
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
       Tags:
         - Key: Stack
           Value: !Sub "${AWS::StackName}"
