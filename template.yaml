@@ -27,6 +27,9 @@ Parameters:
     Description: User pool group name for API Administrators
     Type: String
     Default: BoardGameApp-Admins
+  IndexDocument:
+    Type: String
+    Default: index.html
 
 Resources:
   BoardGamesTable:
@@ -276,7 +279,7 @@ Resources:
       DistributionConfig:
         Enabled: true
         HttpVersion: http2
-        DefaultRootObject: index.html
+        DefaultRootObject: IndexDocument
         DefaultCacheBehavior:
           AllowedMethods:
             - GET
@@ -289,15 +292,15 @@ Resources:
         Origins:
           - Id: S3Origin
             DomainName: !Sub "${BoardGameBucket}.s3.${AWS::Region}.amazonaws.com"
-            OriginPath: !Sub "/${BoardGameBucket}"
+#            OriginPath: !Sub "/${BoardGameBucket}"
             S3OriginConfig:
               OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${BoardGameCloudFrontOriginAccessIdentity}"
-          - Id: ApiGatewayOrigin
-            DomainName: !Sub "${BoardGameAPI}.execute-api.${AWS::Region}.amazonaws.com"
-            OriginPath: "/Prod"
-            CustomOriginConfig:
-              HTTPSPort: 443
-              OriginProtocolPolicy: https-only
+#          - Id: ApiGatewayOrigin
+#            DomainName: !Sub "${BoardGameAPI}.execute-api.${AWS::Region}.amazonaws.com"
+#            OriginPath: "/Prod"
+#            CustomOriginConfig:
+#              HTTPSPort: 443
+#              OriginProtocolPolicy: https-only
 
 Outputs:
 
