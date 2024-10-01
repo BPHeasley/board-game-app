@@ -236,9 +236,9 @@ Resources:
         BlockPublicPolicy: FALSE
         IgnorePublicAcls: FALSE
         RestrictPublicBuckets: FALSE
-      WebsiteConfiguration:
-        IndexDocument: index.html
-        ErrorDocument: error.html
+#      WebsiteConfiguration:
+#        IndexDocument: index.html
+#        ErrorDocument: error.html
       Tags:
         - Key: Stack
           Value: !Sub "${AWS::StackName}"
@@ -290,9 +290,8 @@ Resources:
           - Id: S3Origin
             DomainName: !Sub "${BoardGameBucket}.s3.${AWS::Region}.amazonaws.com"
             OriginPath: !Sub "/${BoardGameBucket}"
-            CustomOriginConfig:
-              HTTPSPort: 443
-              OriginProtocolPolicy: https-only
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${BoardGameCloudFrontOriginAccessIdentity}"
           - Id: ApiGatewayOrigin
             DomainName: !Sub "${BoardGameAPI}.execute-api.${AWS::Region}.amazonaws.com"
             OriginPath: "/Prod"
