@@ -334,7 +334,7 @@ Outputs:
 
   CognitoLoginURL:
     Description: Cognito Login URL
-    Value: !Sub 'https://${UserPoolClient}.auth.${AWS::Region}.amazoncognito.com/login?client_id=${UserPoolClient}&response_type=code&redirect_uri=http://localhost'
+    Value: !Sub 'https://${UserPoolClient}.auth.${AWS::Region}.amazoncognito.com/login?client_id=${UserPoolClient}&response_type=code&redirect_uri=${APIEndpoint}/boardgames'
 
   CognitoAuthCommand:
     Description: AWS CLI command for Amazon Cognito User Pool authentication
