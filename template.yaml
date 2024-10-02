@@ -21,6 +21,10 @@ Globals: # https://docs.aws.amazon.com/serverless-application-model/latest/devel
         POWERTOOLS_METRICS_NAMESPACE: BoardGameApp
   Api:
     TracingEnabled: true
+    Cors:
+      AllowMethods: "'GET,POST,OPTIONS'"
+      AllowHeaders: "'content-type'"
+      AllowOrigin: "'*'"
 
 Parameters:
   UserPoolAdminGroupName:
