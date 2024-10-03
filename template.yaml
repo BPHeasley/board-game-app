@@ -138,14 +138,14 @@ Resources:
       Tags:
         Name: !Sub "${AWS::StackName}-API"
         Stack: !Sub "${AWS::StackName}"
-#      Auth:
-#        DefaultAuthorizer: LambdaRequestAuthorizer
-#        Authorizers:
-#          LambdaRequestAuthorizer:
-#            FunctionArn: !GetAtt AuthorizerFunction.Arn
-#            Identity:
-#              Headers:
-#                - Authorization
+      Auth:
+        DefaultAuthorizer: LambdaRequestAuthorizer
+        Authorizers:
+          LambdaRequestAuthorizer:
+            FunctionArn: !GetAtt AuthorizerFunction.Arn
+            Identity:
+              Headers:
+                - Authorization
 
   UserPool:
     Type: AWS::Cognito::UserPool
