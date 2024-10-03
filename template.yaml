@@ -143,9 +143,9 @@ Resources:
         Authorizers:
           LambdaRequestAuthorizer:
             FunctionArn: !GetAtt AuthorizerFunction.Arn
-            Identity:
-              Headers:
-                - Authorization
+#            Identity:
+#              Headers:
+#                - Authorization
 
   UserPool:
     Type: AWS::Cognito::UserPool
