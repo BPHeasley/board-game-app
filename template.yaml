@@ -240,7 +240,7 @@ Resources:
       AccessControl: Private
       PublicAccessBlockConfiguration:
         BlockPublicAcls: TRUE
-        BlockPublicPolicy: TRUE
+        BlockPublicPolicy: FALSE
         IgnorePublicAcls: TRUE
         RestrictPublicBuckets: TRUE
       Tags:
