@@ -299,7 +299,10 @@ Resources:
           - Id: S3Origin
             DomainName: !Sub "${BoardGameBucket}.s3.${AWS::Region}.amazonaws.com"
 #            OriginPath: !Sub "/${BoardGameBucket}"
-#            S3OriginConfig:
+            S3OriginConfig:
+              OriginAccessIdentity: ""
+                # specifying empty OAI to use OAC as per:
+                # https://docs:aws:amazon:com/cloudfront/latest/APIReference/API_S3OriginConfig:html
 #              OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${BoardGameCloudFrontOriginAccessIdentity}"
           - Id: ApiGatewayOrigin
             DomainName: !Sub "${BoardGameAPI}.execute-api.${AWS::Region}.amazonaws.com"
