@@ -304,12 +304,12 @@ Resources:
                 # specifying empty OAI to use OAC as per:
                 # https://docs:aws:amazon:com/cloudfront/latest/APIReference/API_S3OriginConfig:html
 #              OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${BoardGameCloudFrontOriginAccessIdentity}"
-          - Id: ApiGatewayOrigin
-            DomainName: !Sub "${BoardGameAPI}.execute-api.${AWS::Region}.amazonaws.com"
-            OriginPath: "/Prod"
-            CustomOriginConfig:
-              HTTPSPort: 443
-              OriginProtocolPolicy: https-only
+#          - Id: ApiGatewayOrigin
+#            DomainName: !Sub "${BoardGameAPI}.execute-api.${AWS::Region}.amazonaws.com"
+#            OriginPath: "/Prod"
+#            CustomOriginConfig:
+#              HTTPSPort: 443
+#              OriginProtocolPolicy: https-only
 
 Outputs:
 
