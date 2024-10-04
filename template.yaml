@@ -257,7 +257,7 @@ Resources:
             Action: "s3:GetObject"
             Resource: !Sub "${BoardGameBucket.Arn}/*"
             Principal:
-              AWS: !Sub '${CloudFrontDistribution.Arn}'
+              AWS: !Sub "${CloudFrontDistribution}"
 #              AWS: !Sub 'arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${BoardGameCloudFrontOriginAccessIdentity}'
           - Sid: AllowGetPutListObject
             Effect: Allow
@@ -344,3 +344,7 @@ Outputs:
   CognitoAuthCommand:
     Description: AWS CLI command for Amazon Cognito User Pool authentication
     Value: !Sub 'aws cognito-idp initiate-auth --auth-flow USER_PASSWORD_AUTH --client-id ${UserPoolClient} --auth-parameters USERNAME=<user@example.com>,PASSWORD=<password> --query "AuthenticationResult.IdToken" --output text'
+
+  CloudFrontDistribution:
+    Description: CloudFront Distribution ID
+    Value: !Ref CloudFrontDistribution
