@@ -258,6 +258,7 @@ Resources:
             Resource: !Sub "${BoardGameBucket.Arn}/*"
             Principal:
               Service: "cloudfront.amazonaws.com"
+              AWS: !Sub 'arn:aws:iam::cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}"
 #              AWS: !Sub 'arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${BoardGameCloudFrontOriginAccessIdentity}'
           - Sid: AllowGetPutListObject
             Effect: Allow
