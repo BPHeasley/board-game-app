@@ -107,9 +107,6 @@ jobs:
             --s3-bucket ${TESTING_ARTIFACTS_BUCKET} \
             --no-fail-on-empty-changeset \
             --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE}
-          #update the API Endpoint
-          dev_id=$(aws apigateway get-rest-apis | python -c "import sys, json; print(json.load(sys.stdin)['items'][0]['id'])" --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE})
-          sed -i "s/API_ID/$dev_id/" ./src/pages/index.html
 
   build-and-package:
     if: github.ref == 'refs/heads/main'
@@ -200,34 +197,30 @@ jobs:
           # trigger the upload here
           aws s3 sync ./src/pages/ ${TESTING_WEBSITE_BUCKET}
 
+  update-index:
+    if: github.ref =='refs/heads/main'
+    needs: [deploy-testing]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update the dev API Endpoint in index.html
+        uses: actions/checkout@v3
+        with:
+          role-to-assume: ${{ env.TESTING_PIPELINE_EXECUTION_ROLE }}
+          role-session-name: testing-deployment
+          role-duration-seconds: 3600
+          role-skip-session-tagging: true
+        run: |
+          dev_id=$(aws apigateway get-rest-apis | python -c "import sys, json; print(json.load(sys.stdin)['items'][0]['id'])" --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE})
+          sed -i "s/API_ID/$dev_id/" ./src/pages/index.html
+
   integration-test:
     if: github.ref == 'refs/heads/main'
-    needs: [deploy-testing]
+    needs: [update-index]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - run: |
           # trigger the integration tests here
-
-#  upload-test:
-#    if: github.ref == 'refs/heads/main'
-#    needs: [build-and-package]
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#      - run: |
-#          # trigger the upload here
-#          aws s3 sync ./src/pages/ TESTING_WEBSITE_BUCKET
-
-#  upload-prod:
-#    if: github.ref == 'refs/heads/main'
-#    needs: [ build-and-package ]
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#      - run: |
-#          # trigger the upload here
-#          aws s3 sync ./src/pages/ PROD_WEBSITE_BUCKET
 
   deploy-prod:
     if: github.ref == 'refs/heads/main'
@@ -263,7 +256,5 @@ jobs:
             --s3-bucket ${PROD_ARTIFACTS_BUCKET} \
             --no-fail-on-empty-changeset \
             --role-arn ${PROD_CLOUDFORMATION_EXECUTION_ROLE}
-          prod_id=$(aws apigateway get-rest-apis | python -c "import sys, json; print(json.load(sys.stdin)['items'][1]['id'])" --role-arn ${PROD_CLOUDFORMATION_EXECUTION_ROLE})
-          sed -i "s/$dev_id/$prod_id/" ./src/pages/index.html
           # trigger the upload here
           aws s3 sync ./src/pages/ ${PROD_WEBSITE_BUCKET}
