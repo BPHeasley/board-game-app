@@ -68,6 +68,7 @@ Resources:
           TABLE_NAME: !Ref BoardGamesTable
       Tags:
         Stack: !Sub "${AWS::StackName}"
+
   GetBoardGameFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -88,6 +89,7 @@ Resources:
           TABLE_NAME: !Ref BoardGamesTable
       Tags:
         Stack: !Sub "${AWS::StackName}"
+
   GetAllBoardGamesFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -108,6 +110,7 @@ Resources:
           TABLE_NAME: !Ref BoardGamesTable
       Tags:
         Stack: !Sub "${AWS::StackName}"
+
   DeleteBoardGameFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -239,10 +242,10 @@ Resources:
       BucketName: !Sub "${AWS::StackName}-boardgamebucket"
       AccessControl: Private
       PublicAccessBlockConfiguration:
-        BlockPublicAcls: TRUE
+        BlockPublicAcls: FALSE
         BlockPublicPolicy: FALSE
         IgnorePublicAcls: TRUE
-        RestrictPublicBuckets: TRUE
+        RestrictPublicBuckets: FALSE
       Tags:
         - Key: Stack
           Value: !Sub "${AWS::StackName}"
@@ -261,7 +264,6 @@ Resources:
             Condition:
               StringEquals:
                 "AWS:SourceArn": !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}"
-#              AWS: !Sub "arn:aws:iam::cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}"
           - Sid: AllowGetPutListObject
             Effect: Allow
             Principal: "*"
@@ -300,7 +302,9 @@ Resources:
           CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad
         Origins:
           - Id: S3Origin
-            DomainName: !Sub "${BoardGameBucket}.s3.${AWS::Region}.amazonaws.com"
+#            DomainName: !Sub "${BoardGameBucket}.s3.${AWS::Region}.amazonaws.com"
+            DomainName: !Sub "${BoardGameBucket}.s3-wewbsite-${AWS::Region}.amazonaws.com"
+            # board-game-app-dev-boardgamebucket.s3-website-us-east-1.amazonaws.com
 #            OriginPath: !Sub "/${BoardGameBucket}"
             S3OriginConfig:
               OriginAccessIdentity: ""
@@ -316,29 +320,9 @@ Resources:
 
 Outputs:
 
-  AddBoardGameFunction:
-    Description: Add Board Game Lambda Function
-    Value: !Ref AddBoardGameFunction
-
-  BoardGamesTable:
-    Description: "Board Games DynamoDB Table"
-    Value: !Ref BoardGamesTable
-
   APIEndpoint:
     Description: "API Gateway endpoint URL"
     Value: !Sub "https://${BoardGameAPI}.execute-api.${AWS::Region}.amazonaws.com/Prod"
-
-  UserPool:
-    Description: Cognito User Pool ID
-    Value: !Ref UserPool
-
-  UserPoolClient:
-    Description: Cognito User Pool Application Client ID
-    Value: !Ref UserPoolClient
-
-  UserPoolAdminGroupName:
-    Description: Cognito User Pool Group Name for Administrators
-    Value: !Ref UserPoolAdminGroupName
 
   CognitoLoginURL:
     Description: Cognito Login URL
@@ -347,7 +331,3 @@ Outputs:
   CognitoAuthCommand:
     Description: AWS CLI command for Amazon Cognito User Pool authentication
     Value: !Sub 'aws cognito-idp initiate-auth --auth-flow USER_PASSWORD_AUTH --client-id ${UserPoolClient} --auth-parameters USERNAME=<user@example.com>,PASSWORD=<password> --query "AuthenticationResult.IdToken" --output text'
-
-  CloudFrontDistribution:
-    Description: CloudFront Distribution ID
-    Value: !Ref CloudFrontDistribution
