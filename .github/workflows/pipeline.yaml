@@ -267,7 +267,7 @@ jobs:
             --role-arn ${PROD_CLOUDFORMATION_EXECUTION_ROLE}
           prod_id=$(aws apigateway get-rest-apis /
             | python -c "import sys, json; print(json.load(sys.stdin)['items'][1]['id'])" /
-            --role-arn ${PROD_CLOUDFORMATION_EXECUTION_ROLE)
+            --role-arn ${PROD_CLOUDFORMATION_EXECUTION_ROLE})
           sed -i "s/$dev_id/$prod_id/" ./src/pages/index.html
           # trigger the upload here
           aws s3 sync ./src/pages/ ${PROD_WEBSITE_BUCKET}
