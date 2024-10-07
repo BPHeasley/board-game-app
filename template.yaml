@@ -244,7 +244,7 @@ Resources:
       PublicAccessBlockConfiguration:
         BlockPublicAcls: FALSE
         BlockPublicPolicy: FALSE
-        IgnorePublicAcls: FALSE
+        IgnorePublicAcls: TRUE
         RestrictPublicBuckets: FALSE
       Tags:
         - Key: Stack
