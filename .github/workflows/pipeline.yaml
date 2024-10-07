@@ -108,9 +108,7 @@ jobs:
             --no-fail-on-empty-changeset \
             --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE}
           #update the API Endpoint
-          dev_id=$(aws apigateway get-rest-apis /
-            | python -c "import sys, json; print(json.load(sys.stdin)['items'][0]['id'])" /
-            --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE)
+          dev_id=$(aws apigateway get-rest-apis | python -c "import sys, json; print(json.load(sys.stdin)['items'][0]['id'])" --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE})
           sed -i "s/API_ID/$dev_id/" ./src/pages/index.html
 
   build-and-package:
@@ -265,9 +263,7 @@ jobs:
             --s3-bucket ${PROD_ARTIFACTS_BUCKET} \
             --no-fail-on-empty-changeset \
             --role-arn ${PROD_CLOUDFORMATION_EXECUTION_ROLE}
-          prod_id=$(aws apigateway get-rest-apis /
-            | python -c "import sys, json; print(json.load(sys.stdin)['items'][1]['id'])" /
-            --role-arn ${PROD_CLOUDFORMATION_EXECUTION_ROLE})
+          prod_id=$(aws apigateway get-rest-apis | python -c "import sys, json; print(json.load(sys.stdin)['items'][1]['id'])" --role-arn ${PROD_CLOUDFORMATION_EXECUTION_ROLE})
           sed -i "s/$dev_id/$prod_id/" ./src/pages/index.html
           # trigger the upload here
           aws s3 sync ./src/pages/ ${PROD_WEBSITE_BUCKET}
