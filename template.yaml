@@ -303,7 +303,7 @@ Resources:
         Origins:
           - Id: S3Origin
 #            DomainName: !Sub "${BoardGameBucket}.s3.${AWS::Region}.amazonaws.com"
-            DomainName: !Sub "${BoardGameBucket}.s3-wewbsite-${AWS::Region}.amazonaws.com"
+            DomainName: !Sub "${BoardGameBucket}.s3-website-${AWS::Region}.amazonaws.com"
             # board-game-app-dev-boardgamebucket.s3-website-us-east-1.amazonaws.com
 #            OriginPath: !Sub "/${BoardGameBucket}"
             S3OriginConfig:

@@ -268,4 +268,3 @@ jobs:
           sed -i "s/$dev_id/$prod_id/" ./src/pages/index.html
           # trigger the upload here
           aws s3 sync ./src/pages/ ${PROD_WEBSITE_BUCKET}
-          sed -i "s/$prod_id/API_ID/" ./src/pages/index.html
