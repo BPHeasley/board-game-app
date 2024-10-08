@@ -194,28 +194,32 @@ jobs:
             --s3-bucket ${TESTING_ARTIFACTS_BUCKET} \
             --no-fail-on-empty-changeset \
             --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE}
-
-  update-index:
-    if: github.ref =='refs/heads/main'
-    needs: [ deploy-testing ]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: aws-actions/configure-aws-credentials@v1-node16
-        with:
-          aws-region: ${{ env.TESTING_REGION }}
-          role-to-assume: ${{ env.TESTING_CLOUDFORMATION_EXECUTION_ROLE }}
-          role-session-name: updating-index
-          role-duration-seconds: 3600
-          role-skip-session-tagging: true
-      - run: |
-          dev_id=$(aws apigateway get-rest-apis | python -c "import sys, json; print(json.load(sys.stdin)['items'][0]['id'])")
-          sed -i "s/API_ID/$dev_id/" ./src/pages/index.html
+          API_URL=$(aws cloudformation describe-stacks --stack-name board-game-app-dev --query 'Stacks[0].Outputs[1].OutputValue') --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE}
+          sed -i "s/API_URL/$API_URL/" ./src/pages/index.html
           # trigger the upload here
           aws s3 sync ./src/pages/ ${TESTING_WEBSITE_BUCKET}
 
+#  update-index:
+#    if: github.ref =='refs/heads/main'
+#    needs: [ deploy-testing ]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: aws-actions/configure-aws-credentials@v1-node16
+#        with:
+#          aws-region: ${{ env.TESTING_REGION }}
+#          role-to-assume: ${{ env.TESTING_CLOUDFORMATION_EXECUTION_ROLE }}
+#          role-session-name: updating-index
+#          role-duration-seconds: 3600
+#          role-skip-session-tagging: true
+#      - run: |
+#          dev_id=$(aws apigateway get-rest-apis | python -c "import sys, json; print(json.load(sys.stdin)['items'][0]['id'])")
+#          sed -i "s/API_ID/$dev_id/" ./src/pages/index.html
+#          # trigger the upload here
+#          aws s3 sync ./src/pages/ ${TESTING_WEBSITE_BUCKET}
+
   integration-test:
     if: github.ref == 'refs/heads/main'
-    needs: [update-index]
+    needs: [deploy-testing]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
