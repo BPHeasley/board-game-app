@@ -242,7 +242,7 @@ jobs:
             --s3-bucket ${PROD_ARTIFACTS_BUCKET} \
             --no-fail-on-empty-changeset \
             --role-arn ${PROD_CLOUDFORMATION_EXECUTION_ROLE}
-          PROD_API_URL=$(aws cloudformation describe-stacks --stack-name board-game-app-dev --query 'Stacks[1].Outputs[1].OutputValue' | tr -d '"')
+          PROD_API_URL=$(aws cloudformation describe-stacks --stack-name board-game-app-prod --query 'Stacks[0].Outputs[1].OutputValue' | tr -d '"')
           sed -i "s|$API_URL|$PROD_API_URL|" ./src/pages/index.html
           # trigger the upload here
           aws s3 sync ./src/pages/ ${PROD_WEBSITE_BUCKET}
