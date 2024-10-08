@@ -7,7 +7,7 @@
     <script>
         async function get_all_board_games() {
             try {
-                const response = await fetch("API_URL/boardgames");
+                const response = await fetch("API_GATEWAY_URL/boardgames");
                 if (response.ok) {
                     const data = await response.json();
                     document.getElementById("data-output").textContent = JSON.stringify(data, null, 2);
