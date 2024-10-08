@@ -203,12 +203,12 @@ jobs:
       - uses: aws-actions/configure-aws-credentials@v1-node16
         with:
           aws-region: ${{ env.TESTING_REGION }}
-          role-to-assume: ${{ env.TESTING_PIPELINE_EXECUTION_ROLE }}
+          role-to-assume: ${{ env.TESTING_CLOUDFORMATION_EXECUTION_ROLE }}
           role-session-name: updating-index
           role-duration-seconds: 3600
           role-skip-session-tagging: true
       - run: |
-          dev_id=$(aws apigateway get-rest-apis | python -c "import sys, json; print(json.load(sys.stdin)['items'][0]['id'])" --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE})
+          dev_id=$(aws apigateway get-rest-apis | python -c "import sys, json; print(json.load(sys.stdin)['items'][0]['id'])")
           sed -i "s/API_ID/$dev_id/" ./src/pages/index.html
           # trigger the upload here
           aws s3 sync ./src/pages/ ${TESTING_WEBSITE_BUCKET}
