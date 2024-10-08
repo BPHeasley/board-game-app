@@ -194,7 +194,7 @@ jobs:
             --s3-bucket ${TESTING_ARTIFACTS_BUCKET} \
             --no-fail-on-empty-changeset \
             --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE}
-          API_URL=$(aws cloudformation describe-stacks --stack-name board-game-app-dev --query 'Stacks[0].Outputs[1].OutputValue' --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE})
+          API_URL=$(aws cloudformation describe-stacks --stack-name board-game-app-dev --query 'Stacks[0].Outputs[1].OutputValue')
           sed -i "s/API_URL/$API_URL/" ./src/pages/index.html
           # trigger the upload here
           aws s3 sync ./src/pages/ ${TESTING_WEBSITE_BUCKET}
