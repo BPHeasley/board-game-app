@@ -200,7 +200,7 @@ jobs:
     needs: [ deploy-testing ]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: aws-actions/configure-aws-credentials@v1-node16
         with:
           role-to-assume: ${{ env.TESTING_CLOUDFORMATION_EXECUTION_ROLE }}
           role-session-name: testing-deployment
