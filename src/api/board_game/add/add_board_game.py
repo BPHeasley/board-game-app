@@ -2,9 +2,9 @@ import boto3
 import json
 import os
 
-# from aws_lambda_powertools import Logger
+from aws_lambda_powertools import Logger
 
-# logger = Logger()
+logger = Logger()
 
 dynamodb = boto3.resource('dynamodb',  region_name='us-east-1')
 board_games_table = os.getenv('TABLE_NAME')
@@ -14,6 +14,8 @@ def add_board_game(event: dict):
     # logger.info("Adding a new board game")
     board_game_detail = json.loads(event['body'])
     board_game_title = board_game_detail['title']
+
+    logger.info(event)
 
     ddb_item = {
         'title': board_game_title,
@@ -42,4 +44,4 @@ def lambda_handler(event, context):
         }
         return response
     except Exception as err:
-        raise
+        raise err
