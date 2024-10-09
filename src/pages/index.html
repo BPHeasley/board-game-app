@@ -79,6 +79,7 @@
 			<th>Name</th>
 			<th>Players</th>
 			<th>Winner</th>
+			<th>Date</th>
 		  </tr>
 		</thead>
 		<tbody id="detailRows">
@@ -107,6 +108,7 @@
 					<td>${game.data.title}</td>
 					<td>${game.data.players}</td>
 					<td>${game.data.winner}</td>
+					<td>${game.data.date}</td>
 				  </tr>`;
 				  detailTableBody.innerHTML += detailRow;
 				});
@@ -193,6 +195,10 @@
 		  <tr>
 		    <td><label for="winner">Winner</label></td>
 			<td><input type="text" id="winner" name="winner" placeholder="Enter the winner of the game..." required></td>
+		  </tr>
+		  <tr>
+			<td><label for="date">Date</label></td>
+			<td><input type="date" id="date" name="date" value="2024-10-01" required></td>
 		  </tr>
 		  <tr>
 			<td><input type="submit" value="Submit Game"></td>

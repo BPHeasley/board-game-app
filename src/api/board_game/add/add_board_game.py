@@ -18,6 +18,7 @@ def add_board_game(event: dict):
     board_game_desc = board_game_details['desc']
     board_game_players = board_game_details['players']
     board_game_winner = board_game_details['winner']
+    board_game_date = board_game_details['date']
 
     ddb_item = {
         'title': board_game_title,
@@ -25,7 +26,8 @@ def add_board_game(event: dict):
             'title': board_game_title,
             'desc': board_game_desc,
             'players': board_game_players,
-            'winner': board_game_winner
+            'winner': board_game_winner,
+            'date': board_game_date
         }
     }
     table = dynamodb.Table(board_games_table)
