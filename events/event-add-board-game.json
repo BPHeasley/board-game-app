@@ -7,6 +7,6 @@
     "multiValueQueryStringParameters": null,
     "pathParameters": null,
     "stageVariables": null,
-    "body": "{\"title\":\"test title\", \"desc\": \"test desc\", \"players\": \"1\" }",
+    "body": "{\"title\":\"test title\", \"desc\": \"test desc\", \"players\": \"1\", \"winner\": \"Ben\" }",
     "isBase64Encoded": false
 }
