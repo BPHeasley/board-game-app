@@ -17,18 +17,20 @@ def add_board_game(event: dict):
     board_game_title = board_game_details['title']
     board_game_desc = board_game_details['desc']
     board_game_players = board_game_details['players']
+    board_game_winner = board_game_details['winner']
 
     ddb_item = {
         'title': board_game_title,
         'data': {
             'title': board_game_title,
             'desc': board_game_desc,
-            'players': board_game_players
+            'players': board_game_players,
+            'winner': board_game_winner
         }
     }
     table = dynamodb.Table(board_games_table)
 
-    table.put_item(Item=ddb_item, ConditionExpression='attribute_not_exists(title)')
+    table.put_item(Item=ddb_item)
 
     logger.info(f"Added board game {board_game_title}")
 

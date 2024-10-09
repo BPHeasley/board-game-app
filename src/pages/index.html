@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Board Game Data</title>
   <style>
+	#myInput {
+	  background-image: url('/css/searchicon.png');
+	  background-position: 10px 10px;
+	  background-repeat: no-repeat;
+	  font-size: 16px;
+	  padding: 12px 20px 12px 40px;
+	  border: 1px solid #ddd;
+	  margin-bottom: 12px;
+	}
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
@@ -50,8 +59,9 @@
 
   <div>
     <div style="float: left; width: 50%">
+	  <input type="text" id="myInput" onkeyup="titleFilter()" placeholder="Title" title="Type in a title"/>
 	  <!-- Table to display the data -->
-	  <table id="dataTable" style="display:none;">
+	  <table id="dataTable">
 		<thead>
 		  <tr>
 			<th>Title</th>
@@ -62,6 +72,53 @@
 		  <!-- Data will be inserted here dynamically -->
 		</tbody>
 	  </table>
+
+	  <table id="titleDetails" style="display: none;">
+		<thead>
+		  <tr>
+			<th>Name</th>
+			<th>Players</th>
+			<th>Winner</th>
+		  </tr>
+		</thead>
+		<tbody id="detailRows">
+		  <!-- Details will be inserted dynamically -->
+		</tbody>
+	  </table>
+
+	  <script>
+	    document.querySelectorAll('.expandable').forEach(row => {
+		  row.addEventListener('click', function() {
+		    const selectedTitle = this.getAttribute('data-title');
+		    fetch("https://46k0yyn066.execute-api.us.east-1.amazonawss.com/Prod/boardgames/" + selectedTitle)
+			  .then(response => response.json())
+			  .then(data => {
+			    jsonData = data;
+			  })
+			  .then(() => {
+
+				// API call to get the specific board game data
+				// Filter and display game details for the selected Title
+				const detailTableBody = document.getElementById('#titleDetails tbody');
+				detailTableBody.innerHTML = ''; // clear previous Details
+
+				jsonData.forEach(game => {
+				  const detailRow = `<tr>
+					<td>${game.data.title}</td>
+					<td>${game.data.players}</td>
+					<td>${game.data.winner}</td>
+				  </tr>`;
+				  detailTableBody.innerHTML += detailRow;
+				});
+
+				document.getElementById('titleDetails').style.display = 'table';
+				document.querySelectorAll('.expandable').forEach(r => r.classList.remove('expanded'));
+				this.classList.add('expanded');
+			  });
+			});
+		  });
+
+	  </script>
 
 	  <script>
 		// Function to handle data load
@@ -97,6 +154,26 @@
 		});
 	  </script>
 
+	  <script>
+	  function titleFilter() {
+		var input = document.getElementById("myInput");
+		filter = input.value.toUpperCase();
+		table = document.getElementById("dataTable");
+		tr = table.getElementsByTagName("tr");
+		for (i = 0; i < tr.length; i++) {
+		  td = tr[i].getElementsByTagName("td")[0];
+		  if (td) {
+		    txtValue = td.innerText;
+		    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+		      tr[i].style.display = "";
+		    } else {
+		      tr[i].style.display = "none";
+		    }
+		  }
+		}
+	  }
+	  </script>
+
 	</div>
 	<div style="float: left; width: 50%">
 	  <form id="boardGameForm">
@@ -112,6 +189,10 @@
 		  <tr>
 		    <td><label for="numPlayers">Number of Players:</label></td>
 			<td><input type="number" id="numPlayers" name="numPlayers" placeholder="Enter the number of players..." required></td>
+		  </tr>
+		  <tr>
+		    <td><label for="winner">Winner</label></td>
+			<td><input type="text" id="winner" name="winner" placeholder="Enter the winner of the game..." required></td>
 		  </tr>
 		  <tr>
 			<td><input type="submit" value="Submit Game"></td>
@@ -149,7 +230,7 @@
 			alert('Error submitting game.');
 		  });
 		});
-		</script>
+	  </script>
 	</div>
   </div>
 
