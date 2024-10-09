@@ -194,7 +194,7 @@ jobs:
             --s3-bucket ${TESTING_ARTIFACTS_BUCKET} \
             --no-fail-on-empty-changeset \
             --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE}
-          
+           
           # update the index.html file with the testing url
           API_URL=$(aws cloudformation describe-stacks --stack-name board-game-app-dev --query 'Stacks[0].Outputs[1].OutputValue' | tr -d '"')
           sed -i "s|API_GATEWAY_URL|$API_URL|" ./src/pages/index.html

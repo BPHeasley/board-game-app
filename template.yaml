@@ -138,7 +138,7 @@ Resources:
       StageName: Prod
       Cors:
         AllowMethods: "'GET,POST,OPTIONS'"
-        AllowHeaders: "'content-type'"
+        AllowHeaders: "'content-type,access-control-allow-origin'"
         AllowOrigin: "'*'"
       OpenApiVersion: 3.0.1
       TracingEnabled: true
