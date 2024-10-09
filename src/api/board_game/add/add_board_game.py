@@ -35,7 +35,9 @@ def lambda_handler(event, context):
         board_game_detail = add_board_game(event=event)
         response = {
             "statusCode": 200,
-            "headers": {},
+            "headers": {
+                'Access-Control-Allow-Origin': '*'
+            },
             "body": json.dumps(board_game_detail)
         }
         return response
