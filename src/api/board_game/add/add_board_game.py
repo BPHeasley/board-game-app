@@ -11,11 +11,10 @@ board_games_table = os.getenv('TABLE_NAME')
 
 
 def add_board_game(event: dict):
-    # logger.info("Adding a new board game")
+    logger.info("Adding a new board game")
+    logger.info(event)
     board_game_detail = json.loads(event['body'])
     board_game_title = board_game_detail['title']
-
-    logger.info(event)
 
     ddb_item = {
         'title': board_game_title,
