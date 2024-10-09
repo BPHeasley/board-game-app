@@ -1,28 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Static Page with Database Data</title>
-    <script>
-        async function get_all_board_games() {
-            try {
-                const response = await fetch("API_GATEWAY_URL/boardgames");
-                if (response.ok) {
-                    const data = await response.json();
-                    document.getElementById("data-output").textContent = JSON.stringify(data, null, 2);
-                } else {
-                    document.getElementById("data-output").textContent = "Failed to load data.";
-                }
-            } catch (error) {
-                document.getElementById("data-output").textContent = "Error: " + error.message;
-            }
-        }
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Board Game Data</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
 </head>
 <body>
-    <h1>Database Data</h1>
-    <button onclick="get_all_board_games()">Load Data from Database</button>
-    <pre id="data-output"></pre>
+
+  <h1>Board Game Data</h1>
+
+  <!-- Button to load data -->
+  <button id="loadDataButton">Load Data from Database</button>
+  <p id="databaseData"></p>
+
+  <div>
+    <div style="float: left; width: 50%">
+	  <!-- Table to display the data -->
+	  <table id="dataTable" style="display:none;">
+		<thead>
+		  <tr>
+			<th>Title</th>
+			<th>Description</th>
+		  </tr>
+		</thead>
+		<tbody>
+		  <!-- Data will be inserted here dynamically -->
+		</tbody>
+	  </table>
+
+	  <script>
+		// Function to handle data load
+		document.getElementById('loadDataButton').addEventListener('click', function() {
+		  var jsonData;
+		  fetch("API_GATEWAY_URL/boardgames")
+			.then(response => response.json())
+			.then(data => {
+			  jsonData = data;
+			  // document.getElementById('databaseData').innerText = JSON.stringify(data);
+			})
+			.then(() => {
+			  // Reference the table body
+			  const tableBody = document.querySelector('#dataTable tbody');
+			  tableBody.innerHTML = ''; // Clear any existing data
+
+			  // Populate the table with JSON data
+			  jsonData.forEach(game => {
+				const row = `<tr>
+				  <td>${game.data.title}</td>
+				  <td>${game.data.desc}</td>
+				</tr>`;
+				tableBody.innerHTML += row;
+			  });
+			})
+			.catch(error => {
+			  console.error('Error fetching data:', error);
+			  document.getElementById('databaseData').innerText = 'Failed to load data.';
+			});
+
+		  // Show the table
+		  document.getElementById('dataTable').style.display = 'table';
+		});
+	  </script>
+
+	</div>
+	<div style="float: left; width: 50%">
+	  <form id="boardGameForm">
+		<table>
+		  <tr>
+			<td><label for="title">Board Game Name:</label></td>
+			<td><input type="text" id="title" name="title" placeholder="Enter the game name..." required></td>
+		  </tr>
+		  <tr>
+		    <td><label for="gameDescription">Game Description:</label></td>
+			<td><textarea id="gameDescription" name="gameDescription" placeholder="Enter a brief description..." required></textarea></td>
+		  </tr>
+		  <tr>
+		    <td><label for="numPlayers">Number of Players:</label></td>
+			<td><input type="number" id="numPlayers" name="numPlayers" placeholder="Enter the number of players..." required></td>
+		  </tr>
+		  <tr>
+			<td><input type="submit" value="Submit Game"></td>
+		  </tr>
+		</table>
+	  </form>
+
+	  <script>
+	  // Form submission
+		document.getElementById('boardGameForm').addEventListener('submit', function(event) {
+		  event.preventDefault();
+
+		  const gameData = {
+			title: document.getElementById('title').value,
+			desc: document.getElementById('gameDescription').value,
+			players: document.getElementById('numPlayers').value
+		  };
+
+		  fetch("API_GATEWAY_URL/boardgames", {
+			method: 'POST',
+			headers: {
+			  'Content-Type': 'application/json',
+			  'Access-Control-Allow-Origin': '*'
+			},
+			body: JSON.stringify(gameData)
+		  })
+		  .then(response => response.json())
+		  .then(data => {
+			alert('Game submitted successfully!');
+			console.log('Success:', data);
+			document.getElementById('boardGameForm').reset()
+		  })
+		  .catch(error => {
+			console.error('Error submitting game:', error);
+			alert('Error submitting game.');
+		  });
+		});
+		</script>
+	</div>
+  </div>
+
 </body>
 </html>
