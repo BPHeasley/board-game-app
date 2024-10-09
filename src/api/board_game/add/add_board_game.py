@@ -13,22 +13,26 @@ board_games_table = os.getenv('TABLE_NAME')
 def add_board_game(event: dict):
     logger.info("Adding a new board game")
     logger.info(event)
-    board_game_detail = json.loads(event['body'])
-    board_game_title = board_game_detail['title']
+    board_game_details = json.loads(event['body'])
+    board_game_title = board_game_details['title']
+    board_game_desc = board_game_details['desc']
+    board_game_players = board_game_details['players']
 
     ddb_item = {
         'title': board_game_title,
         'data': {
             'title': board_game_title,
+            'desc': board_game_desc,
+            'players': board_game_players
         }
     }
     table = dynamodb.Table(board_games_table)
 
     table.put_item(Item=ddb_item, ConditionExpression='attribute_not_exists(title)')
 
-    # logger.info(f"Added board game {board_game_title}")
+    logger.info(f"Added board game {board_game_title}")
 
-    return board_game_detail
+    return board_game_details
 
 
 def lambda_handler(event, context):
