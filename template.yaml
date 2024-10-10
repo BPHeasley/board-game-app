@@ -39,7 +39,7 @@ Resources:
   BoardGamesTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Sub ${AWS::StackName}-BoardGamesTable
+      TableName: !Sub ${AWS::StackName}-BoardGamesTable-temp
       AttributeDefinitions:
         - AttributeName: "title"
           AttributeType: "S"
