@@ -19,7 +19,7 @@ def lambda_handler(event, context):
         title = event['pathParameters']['title']
         logger.info(title)
         ddb_response = ddbTable.query(
-            KeyConditionExpression=Key('title').eq(title)
+            KeyConditionExpression=Key('title').eq(title) & Key('date').begins_with("2024")
         )
 
         logger.info(ddb_response)
