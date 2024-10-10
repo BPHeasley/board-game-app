@@ -20,6 +20,7 @@ def lambda_handler(event, context):
             response_body = ddb_response['Items']
             status_code = 200
         else:
+            status_code = 404
             response_body = {}
     except Exception as err:
         response_body = {'Error:': str(err)}

@@ -20,7 +20,7 @@ def lambda_handler(event, context):
             KeyConditionExpression=Key('title').eq(event['pathParameters']['title'])
         )
 
-        if 'Item' in ddb_response:
+        if 'Items' in ddb_response:
             response_body = ddb_response['Items']
             status_code = 200
         else:
