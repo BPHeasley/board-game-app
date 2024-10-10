@@ -91,7 +91,7 @@
 	    document.querySelectorAll('.expandable').forEach(row => {
 		  row.addEventListener('click', function() {
 		    const selectedTitle = this.getAttribute('data-title');
-		    fetch("https://46k0yyn066.execute-api.us.east-1.amazonawss.com/Prod/boardgames/" + selectedTitle)
+		    fetch(API_GATEWAY_URL/boardgames/ + selectedTitle)
 			  .then(response => response.json())
 			  .then(data => {
 			    jsonData = data;
@@ -214,7 +214,8 @@
 		  const gameData = {
 			title: document.getElementById('title').value,
 			desc: document.getElementById('gameDescription').value,
-			players: document.getElementById('numPlayers').value
+			players: document.getElementById('numPlayers').value,
+			date: document.getElementById('date').value
 		  };
 
 		  fetch("API_GATEWAY_URL/boardgames", {
