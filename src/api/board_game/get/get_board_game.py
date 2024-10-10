@@ -4,9 +4,9 @@ import os
 
 from python.boto3.dynamodb.conditions import Key
 
-# from aws_lambda_powertools import Logger
+from aws_lambda_powertools import Logger
 
-# logger = Logger()
+logger = Logger()
 
 dynamodb = boto3.resource('dynamodb',  region_name='us-east-1')
 board_games_table = os.getenv('TABLE_NAME')
@@ -15,10 +15,13 @@ ddbTable = dynamodb.Table(board_games_table)
 
 def lambda_handler(event, context):
     status_code = 400  # default response
+    logger.info(event)
     try:
         ddb_response = ddbTable.query(
             KeyConditionExpression=Key('title').eq(event['pathParameters']['title'])
         )
+
+        logger.info(ddb_response)
 
         if 'Items' in ddb_response:
             response_body = ddb_response['Items']
@@ -28,7 +31,6 @@ def lambda_handler(event, context):
             response_body = {}
     except Exception as err:
         response_body = {'Error:': str(err)}
-        status_code = 400
 
     return {
         'statusCode': status_code,
