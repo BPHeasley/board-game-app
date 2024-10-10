@@ -6,7 +6,6 @@
   <title>Board Game Data</title>
   <style>
 	#myInput {
-	  background-image: url('/css/searchicon.png');
 	  background-position: 10px 10px;
 	  background-repeat: no-repeat;
 	  font-size: 16px;
@@ -47,19 +46,31 @@
     th {
       background-color: #f2f2f2;
     }
+	.expandable {
+	  cursor: pointer;
+	  background-color: #f9f9f9;
+	}
+	.hiddenRow {
+	  display: none;
+	}
+	.expanded {
+	  background-color: #eaf0f7;
+	}
   </style>
 </head>
 <body>
 
   <h1>Board Game Data</h1>
 
+  <div>
   <!-- Button to load data -->
   <button id="loadDataButton">Load Data from Database</button>
   <p id="databaseData"></p>
+  <input type="text" id="myInput" onkeyup="titleFilter()" placeholder="Title" title="Type in a title"/>
+  </div>
 
   <div>
     <div style="float: left; width: 50%">
-	  <input type="text" id="myInput" onkeyup="titleFilter()" placeholder="Title" title="Type in a title"/>
 	  <!-- Table to display the data -->
 	  <table id="dataTable">
 		<thead>
@@ -68,113 +79,10 @@
 			<th>Description</th>
 		  </tr>
 		</thead>
-		<tbody>
+		<tbody id="gameTitles">
 		  <!-- Data will be inserted here dynamically -->
 		</tbody>
 	  </table>
-
-	  <table id="titleDetails" style="display: none;">
-		<thead>
-		  <tr>
-			<th>Name</th>
-			<th>Players</th>
-			<th>Winner</th>
-			<th>Date</th>
-		  </tr>
-		</thead>
-		<tbody id="detailRows">
-		  <!-- Details will be inserted dynamically -->
-		</tbody>
-	  </table>
-
-	  <script>
-	    document.querySelectorAll('.expandable').forEach(row => {
-		  row.addEventListener('click', function() {
-		    const selectedTitle = this.getAttribute('data-title');
-		    fetch("API_GATEWAY_URL/boardgames/" + selectedTitle)
-			  .then(response => response.json())
-			  .then(data => {
-			    jsonData = data;
-			  })
-			  .then(() => {
-
-				// API call to get the specific board game data
-				// Filter and display game details for the selected Title
-				const detailTableBody = document.getElementById('#titleDetails tbody');
-				detailTableBody.innerHTML = ''; // clear previous Details
-
-				jsonData.forEach(game => {
-				  const detailRow = `<tr>
-					<td>${game.data.title}</td>
-					<td>${game.data.players}</td>
-					<td>${game.data.winner}</td>
-					<td>${game.data.date}</td>
-				  </tr>`;
-				  detailTableBody.innerHTML += detailRow;
-				});
-
-				document.getElementById('titleDetails').style.display = 'table';
-				document.querySelectorAll('.expandable').forEach(r => r.classList.remove('expanded'));
-				this.classList.add('expanded');
-			  });
-			});
-		  });
-
-	  </script>
-
-	  <script>
-		// Function to handle data load
-		document.getElementById('loadDataButton').addEventListener('click', function() {
-		  var jsonData;
-		  fetch("API_GATEWAY_URL/boardgames")
-			.then(response => response.json())
-			.then(data => {
-			  jsonData = data;
-			  // document.getElementById('databaseData').innerText = JSON.stringify(data);
-			})
-			.then(() => {
-			  // Reference the table body
-			  const tableBody = document.querySelector('#dataTable tbody');
-			  tableBody.innerHTML = ''; // Clear any existing data
-
-			  // Populate the table with JSON data
-			  jsonData.forEach(game => {
-				const row = `<tr>
-				  <td>${game.data.title}</td>
-				  <td>${game.data.desc}</td>
-				</tr>`;
-				tableBody.innerHTML += row;
-			  });
-			})
-			.catch(error => {
-			  console.error('Error fetching data:', error);
-			  document.getElementById('databaseData').innerText = 'Failed to load data.';
-			});
-
-		  // Show the table
-		  document.getElementById('dataTable').style.display = 'table';
-		});
-	  </script>
-
-	  <script>
-	  function titleFilter() {
-		var input = document.getElementById("myInput");
-		filter = input.value.toUpperCase();
-		table = document.getElementById("dataTable");
-		tr = table.getElementsByTagName("tr");
-		for (i = 0; i < tr.length; i++) {
-		  td = tr[i].getElementsByTagName("td")[0];
-		  if (td) {
-		    txtValue = td.innerText;
-		    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-		      tr[i].style.display = "";
-		    } else {
-		      tr[i].style.display = "none";
-		    }
-		  }
-		}
-	  }
-	  </script>
 
 	</div>
 	<div style="float: left; width: 50%">
@@ -205,41 +113,148 @@
 		  </tr>
 		</table>
 	  </form>
-
-	  <script>
-	  // Form submission
-		document.getElementById('boardGameForm').addEventListener('submit', function(event) {
-		  event.preventDefault();
-
-		  const gameData = {
-			title: document.getElementById('title').value,
-			desc: document.getElementById('gameDescription').value,
-			players: document.getElementById('numPlayers').value,
-			date: document.getElementById('date').value
-		  };
-
-		  fetch("API_GATEWAY_URL/boardgames", {
-			method: 'POST',
-			headers: {
-			  'Content-Type': 'application/json',
-			  'Access-Control-Allow-Origin': '*'
-			},
-			body: JSON.stringify(gameData)
-		  })
-		  .then(response => response.json())
-		  .then(data => {
-			alert('Game submitted successfully!');
-			console.log('Success:', data);
-			document.getElementById('boardGameForm').reset()
-		  })
-		  .catch(error => {
-			console.error('Error submitting game:', error);
-			alert('Error submitting game.');
-		  });
-		});
-	  </script>
 	</div>
   </div>
+
+  <script>
+	// Function to handle data load
+	document.getElementById('loadDataButton').addEventListener('click', function() {
+	  var jsonData;
+	  fetch("API_GATEWAY_URL/boardgames/")
+		.then(response => response.json())
+		.then(data => {
+		  jsonData = data;
+		})
+		.then(() => {
+		  // Reference the table body
+		  const tableBody = document.getElementById('gameTitles');
+		  tableBody.innerHTML = ''; // Clear any existing data
+		  const gameTitles = [...new Set(jsonData.map(game => game.title))]; // Unique game titles
+
+		  // Populate the table with JSON data
+		  gameTitles.forEach(title => {
+			const row = `<tr class="expandable" data-title="${title}">
+			  <td>${title}</td>
+			  <td>Click to Expand</td>
+			</tr>
+			<tr class="hiddenRow" id="details-${title}">
+			  <td colspan="4"></td>
+			</tr>`;
+			tableBody.innerHTML += row;
+		  });
+
+		  // Handle click event to expand/collapse game details
+	document.querySelectorAll('.expandable').forEach(row => {
+	  row.addEventListener('click', function() {
+		var jsonData;
+		const selectedTitle = this.getAttribute('data-title');
+		const detailsRow = document.getElementById(`details-${selectedTitle}`);
+		fetch("API_GATEWAY_URL/boardgames/${selectedTitle}")
+		  .then(response => response.json())
+		  .then(data => {
+			jsonData = data;
+		  })
+		  .then(() => {
+			// If the row is already expanded, collapse it
+			if (!details.Row.classList.contains('hiddenRow')) {
+			  detailsRow.classList.add('hiddenRow');
+			  this.classList.remove('expanded');
+			  detailsRow.querySelector('td').innerHTML = ''; // Clear the content when collapsed;
+			  return;
+			}
+
+			// Collapse any previously expanded row
+			document.querySelectorAll('.hiddenRow').forEach(r => {
+			  r.classList.add('hiddenRow');
+			  r.querySelector('td').innerHTML = ''; // Clear content for other rows
+			});
+			document.querySelectorAll('.expandable').foreach(r => r.classList.remove('expanded'));
+
+			// Expand the selected row
+			this.classList.add('expanded');
+			detailsRow.classList.remove('hiddenRow');
+
+			// Filter and display game details for the selected Title
+			let detailContent = `<table width="100%">
+			  <tr>
+				<th>Title</th>
+				<th>Players</th>
+				<th>Winner</th>
+				<th>Date</th>
+			  </tr>`;
+			jsonData.forEach(game => {
+			  detailContent += `<tr>
+				<td>${game.data.title}</td>
+				<td>${game.data.players}</td>
+				<td>${game.data.winner}</td>
+				<td>${game.data.date}</td>
+			  </tr>`;
+			});
+			detailsContent += `</table>`;
+			detailsRow.querySelector('td').innerHTML = detailContent; // Insert the details
+		  });
+	  });
+
+	  // Show the table
+	  // document.getElementById('dataTable').style.display = 'table';
+	});
+		})
+		.catch(error => {
+		  console.error('Error fetching data:', error);
+		  document.getElementById('databaseData').innerText = 'Failed to load data.';
+		});
+	});
+
+  function titleFilter() {
+	var input = document.getElementById("myInput");
+	filter = input.value.toUpperCase();
+	table = document.getElementById("dataTable");
+	tr = table.getElementsByTagName("tr");
+	for (i = 0; i < tr.length; i++) {
+	  td = tr[i].getElementsByTagName("td")[0];
+	  if (td) {
+		txtValue = td.innerText;
+		if (txtValue.toUpperCase().indexOf(filter) > -1) {
+		  tr[i].style.display = "";
+		} else {
+		  tr[i].style.display = "none";
+		}
+	  }
+	}
+  }
+
+  // Form submission
+	document.getElementById('boardGameForm').addEventListener('submit', function(event) {
+	  event.preventDefault();
+
+	  const gameData = {
+		title: document.getElementById('title').value,
+		desc: document.getElementById('gameDescription').value,
+		players: document.getElementById('numPlayers').value,
+		winner: document.getElementById('winner').value,
+		date: document.getElementById('date').value
+	  };
+
+	  fetch("API_GATEWAY_URL/boardgames/", {
+		method: 'POST',
+		headers: {
+		  'Content-Type': 'application/json',
+		  'Access-Control-Allow-Origin': '*'
+		},
+		body: JSON.stringify(gameData)
+	  })
+	  .then(response => response.json())
+	  .then(data => {
+		alert('Game submitted successfully!');
+		console.log('Success:', data);
+		document.getElementById('boardGameForm').reset()
+	  })
+	  .catch(error => {
+		console.error('Error submitting game:', error);
+		alert('Error submitting game.');
+	  });
+	});
+  </script>
 
 </body>
 </html>
