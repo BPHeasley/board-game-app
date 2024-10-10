@@ -17,8 +17,9 @@ def lambda_handler(event, context):
     status_code = 400  # default response
     logger.info(event)
     try:
+        title = event['pathParameters']['title']
         ddb_response = ddbTable.query(
-            KeyConditionExpression=Key('title').eq(event['pathParameters']['title'])
+            KeyConditionExpression=Key('title').eq(title)
         )
 
         logger.info(ddb_response)
