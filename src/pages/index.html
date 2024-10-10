@@ -91,7 +91,7 @@
 	    document.querySelectorAll('.expandable').forEach(row => {
 		  row.addEventListener('click', function() {
 		    const selectedTitle = this.getAttribute('data-title');
-		    fetch(API_GATEWAY_URL/boardgames/ + selectedTitle)
+		    fetch("API_GATEWAY_URL/boardgames/" + selectedTitle)
 			  .then(response => response.json())
 			  .then(data => {
 			    jsonData = data;

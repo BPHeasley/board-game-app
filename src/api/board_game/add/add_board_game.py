@@ -22,6 +22,7 @@ def add_board_game(event: dict):
 
     ddb_item = {
         'title': board_game_title,
+        'date': board_game_date,
         'data': {
             'title': board_game_title,
             'desc': board_game_desc,
