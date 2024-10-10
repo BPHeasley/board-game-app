@@ -15,7 +15,6 @@ ddbTable = dynamodb.Table(board_games_table)
 
 def lambda_handler(event, context):
     status_code = 400  # default response
-    logger.info(event)
     try:
         title = event['pathParameters']['title']
         logger.info(title)
