@@ -2,6 +2,8 @@ import boto3
 import json
 import os
 
+from python.boto3.dynamodb.conditions import Key
+
 # from aws_lambda_powertools import Logger
 
 # logger = Logger()
@@ -14,10 +16,12 @@ ddbTable = dynamodb.Table(board_games_table)
 def lambda_handler(event, context):
     status_code = 400  # default response
     try:
-        ddb_response = ddbTable.get_item(Key={'title': event['pathParameters']['title']})
+        ddb_response = ddbTable.query(
+            KeyConditionExpression=Key('title').eq(event['pathParameters']['title'])
+        )
 
         if 'Item' in ddb_response:
-            response_body = ddb_response['Item']
+            response_body = ddb_response['Items']
             status_code = 200
         else:
             status_code = 404

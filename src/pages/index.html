@@ -156,7 +156,7 @@
 		  })
 		  .then(() => {
 			// If the row is already expanded, collapse it
-			if (!details.Row.classList.contains('hiddenRow')) {
+			if (!detailsRow.classList.contains('hiddenRow')) {
 			  detailsRow.classList.add('hiddenRow');
 			  this.classList.remove('expanded');
 			  detailsRow.querySelector('td').innerHTML = ''; // Clear the content when collapsed;
@@ -168,7 +168,7 @@
 			  r.classList.add('hiddenRow');
 			  r.querySelector('td').innerHTML = ''; // Clear content for other rows
 			});
-			document.querySelectorAll('.expandable').foreach(r => r.classList.remove('expanded'));
+			document.querySelectorAll('.expandable').forEach(r => r.classList.remove('expanded'));
 
 			// Expand the selected row
 			this.classList.add('expanded');
