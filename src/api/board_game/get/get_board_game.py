@@ -19,7 +19,7 @@ def lambda_handler(event, context):
         title = event['pathParameters']['title']
         logger.info(title)
         ddb_response = ddbTable.query(
-            KeyConditionExpression=Key('title').eq(title) & Key('date').begins_with("2024")
+            KeyConditionExpression=Key('title').eq(title)
         )
 
         logger.info(ddb_response)
@@ -32,6 +32,7 @@ def lambda_handler(event, context):
             response_body = {}
     except Exception as err:
         response_body = {'Error:': str(err)}
+        logger.info(response_body)
 
     return {
         'statusCode': status_code,
