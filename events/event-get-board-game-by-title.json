@@ -1,6 +1,6 @@
 {
-  "resource": "boardgames/{title}",
-  "path": "/boardgames/",
+  "resource": "boardgames/",
+  "path": "/boardgames/{title}",
   "httpMethod": "GET",
   "headers": null,
   "multiValueHeaders": null,
