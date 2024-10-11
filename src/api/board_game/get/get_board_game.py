@@ -16,8 +16,7 @@ ddbTable = dynamodb.Table(board_games_table)
 def lambda_handler(event, context):
     status_code = 400  # default response
     try:
-        title = event['pathParameters']['title'].message
-        logger.info(title)
+        title = event['pathParameters']['title']
         ddb_response = ddbTable.query(
             KeyConditionExpression=Key('title').eq(title)
         )
