@@ -3,16 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Board Game Data</title>
+  <title>Expandable Board Game List from API</title>
   <style>
-	#myInput {
-	  background-position: 10px 10px;
-	  background-repeat: no-repeat;
-	  font-size: 16px;
-	  padding: 12px 20px 12px 40px;
-	  border: 1px solid #ddd;
-	  margin-bottom: 12px;
-	}
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
@@ -20,71 +12,52 @@
     h1 {
       color: #2c3e50;
     }
-    button {
-      padding: 10px 15px;
-      font-size: 16px;
-      background-color: #3498db;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #2980b9;
-    }
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
-    }
-    table, th, td {
-      border: 1px solid #ddd;
+      margin: 20px 0;
     }
     th, td {
       padding: 12px;
+      border: 1px solid #ddd;
       text-align: left;
     }
     th {
-      background-color: #f2f2f2;
+      background-color: #f4f4f4;
     }
-	.expandable {
-	  cursor: pointer;
-	  background-color: #f9f9f9;
-	}
-	.hiddenRow {
-	  display: none;
-	}
-	.expanded {
-	  background-color: #eaf0f7;
-	}
+    .expandable {
+      cursor: pointer;
+      background-color: #f9f9f9;
+    }
+    .hiddenRow {
+      display: none;
+    }
+    .expanded {
+      background-color: #eaf0f7;
+    }
   </style>
 </head>
 <body>
 
-  <h1>Board Game Data</h1>
+  <h1>Board Game Application</h1>
 
   <div>
-  <!-- Button to load data -->
-  <button id="loadDataButton">Load Data from Database</button>
-  <p id="databaseData"></p>
-  <input type="text" id="myInput" onkeyup="titleFilter()" placeholder="Title" title="Type in a title"/>
-  </div>
+	<div style="float: left; width: 50%">
 
-  <div>
-    <div style="float: left; width: 50%">
-	  <!-- Table to display the data -->
-	  <table id="dataTable">
+	  <!-- Single table for all game titles and expanded rows -->
+	  <table id="gameTable">
 		<thead>
 		  <tr>
-			<th>Title</th>
-			<th>Description</th>
+			<th>Game Title</th>
+			<th>Action</th>
 		  </tr>
 		</thead>
 		<tbody id="gameTitles">
-		  <!-- Data will be inserted here dynamically -->
+		  <!-- Titles and expandable rows will be inserted dynamically -->
 		</tbody>
 	  </table>
-
 	</div>
+
 	<div style="float: left; width: 50%">
 	  <form id="boardGameForm">
 		<table>
@@ -94,15 +67,15 @@
 		  </tr>
 		  <tr>
 		    <td><label for="gameDescription">Game Description:</label></td>
-			<td><textarea id="gameDescription" name="gameDescription" placeholder="Enter a brief description..." required></textarea></td>
+			<td><textarea id="gameDescription" name="gameDescription" placeholder="Enter a brief description..."></textarea></td>
 		  </tr>
 		  <tr>
 		    <td><label for="numPlayers">Number of Players:</label></td>
-			<td><input type="number" id="numPlayers" name="numPlayers" placeholder="Enter the number of players..." required></td>
+			<td><input type="number" id="numPlayers" name="numPlayers" placeholder="Enter the number of players..."></td>
 		  </tr>
 		  <tr>
 		    <td><label for="winner">Winner</label></td>
-			<td><input type="text" id="winner" name="winner" placeholder="Enter the winner of the game..." required></td>
+			<td><input type="text" id="winner" name="winner" placeholder="Enter the winner of the game..."></td>
 		  </tr>
 		  <tr>
 			<td><label for="date">Date</label></td>
@@ -117,95 +90,90 @@
   </div>
 
   <script>
-	// Function to handle data load
-	document.getElementById('loadDataButton').addEventListener('click', function() {
-	  var jsonData;
-	  fetch("API_GATEWAY_URL/boardgames/")
-		.then(response => response.json())
-		.then(data => {
-		  jsonData = data;
-		})
-		.then(() => {
-		  // Reference the table body
-		  const tableBody = document.getElementById('gameTitles');
-		  tableBody.innerHTML = ''; // Clear any existing data
-		  const gameTitles = [...new Set(jsonData.map(game => game.title))]; // Unique game titles
+	// Skeleton function to make an API call to fetch game data
+	async function fetchGameData() {
+	  try {
+		// Replace with your actual API endpoint
+		const response = await fetch("API_GATEWAY_URL/boardgames/");
+		const gamesData = await response.json(); // Parse JSON from the API response
 
-		  // Populate the table with JSON data
-		  gameTitles.forEach(title => {
-			const row = `<tr class="expandable" data-title="${title}">
-			  <td>${title}</td>
-			  <td>Click to Expand</td>
-			</tr>
-			<tr class="hiddenRow" id="details-${title}">
-			  <td colspan="4"></td>
-			</tr>`;
-			tableBody.innerHTML += row;
-		  });
+		// Ensure data exists
+		if (Array.isArray(gamesData)) {
+		  populateGameTable(gamesData);
+		} else {
+		  console.error("Invalid data received from API");
+		}
+	  } catch (error) {
+		console.error("Error fetching game data:", error);
+	  }
+	}
 
-		  // Handle click event to expand/collapse game details
-	document.querySelectorAll('.expandable').forEach(row => {
-	  row.addEventListener('click', function() {
-		var jsonData;
-		const selectedTitle = this.getAttribute('data-title');
-		const detailsRow = document.getElementById(`details-${selectedTitle}`);
-		fetch("API_GATEWAY_URL/boardgames/${selectedTitle}")
-		  .then(response => response.json())
-		  .then(data => {
-			jsonData = data;
-		  })
-		  .then(() => {
-			// If the row is already expanded, collapse it
-			if (!detailsRow.classList.contains('hiddenRow')) {
-			  detailsRow.classList.add('hiddenRow');
-			  this.classList.remove('expanded');
-			  detailsRow.querySelector('td').innerHTML = ''; // Clear the content when collapsed;
-			  return;
-			}
+	// Function to populate the table with game titles and their expandable rows
+	function populateGameTable(gamesData) {
+	  const gameTitles = [...new Set(gamesData.map(game => game.title))]; // Unique game titles
+	  const titleTableBody = document.getElementById('gameTitles');
+	  titleTableBody.innerHTML = ""; // clear out contents of the table
 
-			// Collapse any previously expanded row
-			document.querySelectorAll('.hiddenRow').forEach(r => {
-			  r.classList.add('hiddenRow');
-			  r.querySelector('td').innerHTML = ''; // Clear content for other rows
-			});
-			document.querySelectorAll('.expandable').forEach(r => r.classList.remove('expanded'));
-
-			// Expand the selected row
-			this.classList.add('expanded');
-			detailsRow.classList.remove('hiddenRow');
-
-			// Filter and display game details for the selected Title
-			let detailContent = `<table width="100%">
-			  <tr>
-				<th>Title</th>
-				<th>Players</th>
-				<th>Winner</th>
-				<th>Date</th>
-			  </tr>`;
-			jsonData.forEach(game => {
-			  detailContent += `<tr>
-				<td>${game.data.title}</td>
-				<td>${game.data.players}</td>
-				<td>${game.data.winner}</td>
-				<td>${game.data.date}</td>
-			  </tr>`;
-			});
-			detailsContent += `</table>`;
-			detailsRow.querySelector('td').innerHTML = detailContent; // Insert the details
-		  });
+	  gameTitles.forEach(title => {
+		const row = `<tr class="expandable" data-title="${title}">
+		  <td>${title}</td>
+		  <td>Click to Expand</td>
+		</tr>
+		<tr class="hiddenRow" id="details-${title}">
+		  <td colspan="2"></td>
+		</tr>`;
+		titleTableBody.innerHTML += row;
 	  });
 
-	  // Show the table
-	  // document.getElementById('dataTable').style.display = 'table';
-	});
-		})
-		.catch(error => {
-		  console.error('Error fetching data:', error);
-		  document.getElementById('databaseData').innerText = 'Failed to load data.';
-		});
-	});
+	  // Attach click events to each expandable row
+	  document.querySelectorAll('.expandable').forEach(row => {
+		row.addEventListener('click', function() {
+		  const selectedTitle = this.getAttribute('data-title');
+		  const detailsRow = document.getElementById(`details-${selectedTitle}`);
 
-  function titleFilter() {
+		  // If already expanded, collapse it
+		  if (!detailsRow.classList.contains('hiddenRow')) {
+			detailsRow.classList.add('hiddenRow');
+			this.classList.remove('expanded');
+			detailsRow.querySelector('td').innerHTML = ''; // Clear the content when collapsed
+			return;
+		  }
+
+		  // Collapse any previously expanded row
+		  document.querySelectorAll('.hiddenRow').forEach(r => {
+			r.classList.add('hiddenRow');
+			r.querySelector('td').innerHTML = ''; // Clear content for other rows
+		  });
+		  document.querySelectorAll('.expandable').forEach(r => r.classList.remove('expanded'));
+
+		  // Expand the selected row
+		  this.classList.add('expanded');
+		  detailsRow.classList.remove('hiddenRow');
+
+		  // Filter and display game details for the selected title
+		  const gameDetails = gamesData.filter(game => game.title === selectedTitle);
+		  let detailContent = `<table width="100%">
+			<tr>
+			  <th>Title</th>
+			  <th>Players</th>
+			  <th>Winner</th>
+			  <th>Date</th>
+			</tr>`;
+		  gameDetails.forEach(game => {
+			detailContent += `<tr>
+			  <td>${game.title}</td>
+			  <td>${game.data.players}</td>
+			  <td>${game.data.winner}</td>
+			  <td>${game.date}</td>
+			</tr>`;
+		  });
+		  detailContent += `</table>`;
+		  detailsRow.querySelector('td').innerHTML = detailContent; // Insert the details
+		});
+	  });
+	}
+
+	function titleFilter() {
 	var input = document.getElementById("myInput");
 	filter = input.value.toUpperCase();
 	table = document.getElementById("dataTable");
@@ -248,13 +216,18 @@
 		alert('Game submitted successfully!');
 		console.log('Success:', data);
 		document.getElementById('boardGameForm').reset()
+		fetchGameData();
 	  })
 	  .catch(error => {
 		console.error('Error submitting game:', error);
 		alert('Error submitting game.');
 	  });
 	});
+
+	// Fetch game data on page load
+	fetchGameData();
   </script>
+
 
 </body>
 </html>
